@@ -3,9 +3,12 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from sound.forms import SoundForm
 from sound.models import Sound
+
+from django.conf import settings
 # Create your views here.
 def list(request):
 	sounds = Sound.objects.all()
+	print(settings.STATIC_ROOT)
 	return render_to_response('list.html',{'sounds':sounds})
 
 def toUpload(request):
