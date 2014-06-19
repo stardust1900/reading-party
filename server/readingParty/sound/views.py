@@ -8,7 +8,6 @@ from django.conf import settings
 # Create your views here.
 def list(request):
 	sounds = Sound.objects.all()
-	print(settings.STATIC_ROOT)
 	return render_to_response('list.html',{'sounds':sounds})
 
 def toUpload(request):
@@ -28,9 +27,23 @@ def upload(request):
 		form = SoundForm()
 	sounds = Sound.objects.all()
 	return render_to_response('list.html',{'sounds':sounds, 'form': form},context_instance=RequestContext(request))
-def edit(request,soundId):
-	print('edit')
-	return HttpResponse("Edit "+soundId)
+
+def toEdit(request,soundId):
+	s = Sound.objects.get(id=soundId)
+	data = {'':None,'memo':s.memo,'bookUrl':s.bookUrl}
+	form = SoundForm(data)
+	form.soundId = s.id
+	# form.memo = s.memo
+	# form.bookUrl = s.bookUrl
+	# form.id = s.id
+	print(form)
+	return render_to_response('edit.html',{'form': form},context_instance=RequestContext(request));
+
+def edit(request):
+	# s = Sound.objects.get(id=)
+	return HttpResponse("Edit ")
 
 def remove(request,soundId):
-	return  HttpResponse("Remove "+soundId)
+	s = Sound.objects.get(id=soundId)
+	s.delete()
+	return  list(request)

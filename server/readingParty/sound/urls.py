@@ -5,6 +5,7 @@ urlpatterns = patterns('sound.views',
     url(r'^list/$', 'list', name='list'),
     url(r'^toUpload/$', 'toUpload', name='toUpload'),
     url(r'^upload/$', 'upload', name='upload'),
-    url(r'^edit/(\d+)/$', 'edit', name='edit'),
+    url(r'^edit/$', 'edit', name='edit'),
     url(r'^remove/(\d+)/$', 'remove', name='remove'),
+    url(r'^toEdit/(\d+)/$', 'toEdit', name='toEdit'),
 )
