@@ -17,14 +17,13 @@ def toUpload(request):
 	return render_to_response('upload.html',{'form': form},context_instance=RequestContext(request));
 
 def upload(request):
-	
-	#print(request.POST['memo'])
-	#print(request.FILES['soundfile'])
 	if request.method == 'POST':
 	    form = SoundForm(request.POST, request.FILES)
 	    if form.is_valid():
 		    newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'])
 		    newSound.save()
+	    else:
+		    return render_to_response('upload.html',{'form': form},context_instance=RequestContext(request));
 	else:
 		form = SoundForm()
 	sounds = Sound.objects.all()
