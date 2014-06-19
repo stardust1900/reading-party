@@ -15,18 +15,34 @@
 
 	<body>
 		<!-- List of uploaded documents -->
-		{% if sounds %}
+		<!-- {% if sounds %}
 			<ul>
 			{% for sound in sounds %}
-				<li><a href="{{ sound.soundfile.url }}">{{ sound.soundfile.name }}</a></li>
+				<li><a href="{{ sound.soundfile.url }}">{{ sound.soundfile.name }},{{sound.memo}}</a></li>
 			{% endfor %}
 			</ul>
 		{% else %}
 			<p>No documents.</p>
 		{% endif %}
 		<br>
-		<br>
-		<audio src="/media/sounds/2014/06/17/test.mp3" preload="auto" />
+		<br> -->
+        {% if sounds %}
+		<table class="table">
+			{% for sound in sounds %}
+			<tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{sound.memo}},{{sound.id}}</td>
+                <td><audio src="{{ sound.soundfile.url }}" preload="auto" /></td>
+                <td>
+                	<a href="/sound/edit/{{sound.id}}"><span class="glyphicon glyphicon-edit"></span> </a>
+                	<a href="/sound/remove/{{sound.id}}"><span class="glyphicon glyphicon-remove"></span></a>
+                </td>
+			</tr>
+            {% endfor %}
+		</table>
+		{% else %}
+			<p>No documents.</p>
+		{% endif %}
 	</body>
 
 </html> 

@@ -28,3 +28,9 @@ def upload(request):
 		form = SoundForm()
 	sounds = Sound.objects.all()
 	return render_to_response('list.html',{'sounds':sounds, 'form': form},context_instance=RequestContext(request))
+def edit(request,soundId):
+	print('edit')
+	return HttpResponse("Edit "+soundId)
+
+def remove(request,soundId):
+	return  HttpResponse("Remove "+soundId)
