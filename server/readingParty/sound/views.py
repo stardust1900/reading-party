@@ -41,7 +41,17 @@ def toEdit(request,soundId):
 
 def edit(request):
 	# s = Sound.objects.get(id=)
-	return HttpResponse("Edit ")
+	if request.method == 'POST':
+		soundId = request.POST['soundId']
+		print(request.POST['soundId'])
+		s = Sound.objects.get(id=soundId)
+		s.memo = request.POST['memo']
+		s.bookUrl = request.POST['bookUrl']
+		s.save()
+	else:
+		print("get")
+	sounds = Sound.objects.all()
+	return render_to_response('list.html',{'sounds':sounds},context_instance=RequestContext(request))
 
 def remove(request,soundId):
 	s = Sound.objects.get(id=soundId)

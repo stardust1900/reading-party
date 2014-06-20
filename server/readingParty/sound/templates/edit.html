@@ -12,7 +12,7 @@
 		<!-- Upload form. Note enctype attribute! -->
 		<form action="{% url "edit" %}" method="post">
 			{% csrf_token %}
-			<p>{{form.soundId}}</p>
+			<input type="hidden" name="soundId" value="{{form.soundId}}" />
 			<p>{{form.memo.label_tag}}  {{form.memo}}</p>
 			<p>{{form.bookUrl.label_tag}}  {{form.bookUrl}}</p>
 			<p><input type="submit" value="Edit" /></p>
