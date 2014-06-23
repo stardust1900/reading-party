@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Minimal Django File Upload Example</title>	
+		<title>一分钟读书会</title>	
 		{% load staticfiles %}
 		<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 		<script src="{% static "js/audio.min.js" %}"></script>
@@ -14,18 +14,7 @@
 	</head>
 
 	<body>
-		<!-- List of uploaded documents -->
-		<!-- {% if sounds %}
-			<ul>
-			{% for sound in sounds %}
-				<li><a href="{{ sound.soundfile.url }}">{{ sound.soundfile.name }},{{sound.memo}}</a></li>
-			{% endfor %}
-			</ul>
-		{% else %}
-			<p>No documents.</p>
-		{% endif %}
-		<br>
-		<br> -->
+		<h3>一分钟读书会</h3>
         {% if sounds %}
 		<table class="table">
 			{% for sound in sounds %}
@@ -43,6 +32,7 @@
 		{% else %}
 			<p>No documents.</p>
 		{% endif %}
+		<a href="/sound/toUpload" class="btn btn-primary btn-lg active" role="button">添 加</a>
 	</body>
 
 </html> 
