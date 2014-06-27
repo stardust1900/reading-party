@@ -30,6 +30,17 @@
 				</tr>
 	            {% endfor %}
 			</table>
+			<p>
+			  {# sounds.paginator.page_range 这个函数返回包含一个所有页码数的 range 对象 #}
+			  {# 即 range(1, sounds.paginator.num_pages + 1) #}
+			  {% for page_number in sounds.paginator.page_range %}
+			    {% ifequal page_number  sounds.number %}
+			      {{ page_number }}
+			    {% else %}
+			      <a href="?page={{ page_number }}">{{ page_number }}</a>
+			    {% endifequal %}
+			  {% endfor %}
+			</p>
 			{% else %}
 				<p>No documents.</p>
 			{% endif %}

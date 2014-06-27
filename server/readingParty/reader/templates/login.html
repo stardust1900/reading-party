@@ -26,14 +26,14 @@
   </head>
 
   <body>
+     
+    <div class="container">
       {% if password_is_wrong %}
         <div class="alert alert-warning alert-dismissable">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
           <strong>错误!</strong> 用户名或密码错误 
         </div>
       {% endif %}
-    <div class="container">
-     
       <form class="form-signin" role="form" action="{% url "login" %}" method="post">
         {% csrf_token %}
         <h2 class="form-signin-heading">Please sign in</h2>
