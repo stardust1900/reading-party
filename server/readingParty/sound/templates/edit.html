@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Upload file</title>
+		<title>一分钟读书会</title>
 		{% load staticfiles %}
 		<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 	</head>
@@ -10,12 +10,16 @@
 	<body>
       <div class="container">
 		<!-- Upload form. Note enctype attribute! -->
-		<form action="{% url "edit" %}" method="post">
+		<form action="{% url "edit" %}" method="post" role="form" class="form-horizontal">
 			{% csrf_token %}
 			<input type="hidden" name="soundId" value="{{form.soundId}}" />
-			<p>{{form.memo.label_tag}}  {{form.memo}}</p>
-			<p>{{form.bookUrl.label_tag}}  {{form.bookUrl}}</p>
-			<p><input type="submit" value="Edit" /></p>
+			<div class="form-group">
+			{{form.memo.label_tag}}  {{form.memo}}
+            </div>
+			<div class="form-group">
+			{{form.bookUrl.label_tag}}  {{form.bookUrl}}
+			</div>
+			<p><input type="submit" value="修改" class="btn btn-primary"/></p>
 		</form>
 		</div>
 	</body>
