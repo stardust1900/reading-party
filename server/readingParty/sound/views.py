@@ -39,8 +39,9 @@ def toUpload(request):
 def upload(request):
 	if request.method == 'POST':
 	    form = SoundForm(request.POST, request.FILES)
+
 	    if form.is_valid():
-		    newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'])
+		    newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'],reader = request.user)
 		    newSound.save()
 	    else:
 		    return render_to_response('upload.html',{'form': form},context_instance=RequestContext(request));

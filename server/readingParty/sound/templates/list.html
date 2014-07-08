@@ -23,6 +23,7 @@
 	                <td>{{forloop.counter}}</td>
 	                <td>{{sound.memo}}</td>
 	                <td><audio src="{{ sound.soundfile.url }}" preload="auto" /></td>
+	                <td>{{sound.reader.username}}</td>
 	                <td>
 	                	<a href="/sound/toEdit/{{sound.id}}"><span class="glyphicon glyphicon-edit"></span> </a>&nbsp;&nbsp;&nbsp;
 	                	<a href="/sound/remove/{{sound.id}}"><span class="glyphicon glyphicon-remove"></span></a>
