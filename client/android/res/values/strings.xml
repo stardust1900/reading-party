@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">读书会</string>
+    <string name="app_name">ReadingParty</string>
     <string name="hello_world">Hello world!</string>
 
 </resources>
