@@ -81,5 +81,6 @@ def edit(request):
 @login_required
 def remove(request,soundId):
 	s = Sound.objects.get(id=soundId)
-	s.delete()
+	if s.reader == request.user:
+		s.delete()
 	return  HttpResponseRedirect(reverse('sound.views.list'))

@@ -34,16 +34,22 @@
           <strong>错误!</strong> 用户名或密码错误 
         </div>
       {% endif %}
+      {% if is_from_register %}
+        <div class="alert alert-success">
+          注册成功请登录
+        </div>
+      {% endif %}
       <form class="form-signin" role="form" action="{% url "login" %}" method="post">
         {% csrf_token %}
-        <h2 class="form-signin-heading">Please sign in</h2>
+        <h3 class="form-signin-heading">请登录</h3>
         <input name="email" type="email" class="form-control" placeholder="Email address" required autofocus>
         <input name="password" type="password" class="form-control" placeholder="Password" required>
         <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Remember me
+          <input type="checkbox" value="remember-me"> 记住我
         </label>
         <input type="hidden" name="next" value="{{form.next}}" />
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary" type="submit">登录</button>
+        <a class="btn" href="/reader/register"><h3 class="form-signin-heading">注册<i class="glyphicon glyphicon-circle-arrow-right"></i></h3></a>
       </form>
 
     </div> <!-- /container -->

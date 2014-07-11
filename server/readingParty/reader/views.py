@@ -4,11 +4,11 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from reader.forms import LoginForm
+from reader.forms import LoginForm,RegisterForm
 from django.contrib import auth
+from django.contrib.auth.models import User
 # Create your views here.
 def login(request):
-	print('111111')
 	if request.method == 'GET':
 		loginForm = LoginForm()
 		if 'next' in request.GET:
@@ -21,9 +21,7 @@ def login(request):
 		password = request.POST['password']
 		next = request.POST['next']
 		user = auth.authenticate(username=email, password=password)
-		print(email)
-		print(password)
-		print(user)
+
 		if user is not None and user.is_active:
 			auth.login(request, user)
 			return HttpResponseRedirect(next)
@@ -34,3 +32,42 @@ def login(request):
 			else:
 				loginForm.next = "/"
 			return render_to_response('login.html',{'form': loginForm,'password_is_wrong':True},context_instance=RequestContext(request))
+
+def register(request):
+	if request.method == 'GET':
+		registerForm = RegisterForm()
+		return render_to_response('register.html',context_instance=RequestContext(request))
+	else:
+		username = request.POST.get('username','');
+		email = request.POST.get('email','');
+		password1 = request.POST.get('password1','');
+		password2 = request.POST.get('password2','');
+		errors = []
+
+		register = RegisterForm({'readername':username,'readermail':email,'password1':password1,'password2':password2})
+		if not register.is_valid():
+			errors.extend(registerForm.errors.values())
+			return render_to_response('register.html',RequestContext(request,{'username':username,'email':email,'errors':errors}))
+
+		if password1!=password2:
+			errors.append("两次输入的密码不一致!")
+			return render_to_response('register.html',RequestContext(request,{'username':username,'email':email,'errors':errors}))
+			# return render_to_response('register.html',{'errors':errors},context_instance=RequestContext(request))
+
+		filterResult=User.objects.filter(username=username)
+		if len(filterResult)>0:
+			errors.append("用户名已存在")
+			return render_to_response('register.html',RequestContext(request,{'username':username,'email':email,'errors':errors}))
+
+		filterResult=User.objects.filter(email=email)
+		if len(filterResult)>0:
+			errors.append("电邮已注册")
+			return render_to_response('register.html',RequestContext(request,{'username':username,'email':email,'errors':errors}))
+
+		user=User()
+		user.username=username
+		user.email=email
+		user.set_password(password1)
+		user.save()
+
+		return render_to_response('login.html',RequestContext(request,{'is_from_register':True}))
