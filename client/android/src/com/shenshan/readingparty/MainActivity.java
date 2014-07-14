@@ -1,17 +1,26 @@
 package com.shenshan.readingparty;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements OnClickListener {
@@ -19,6 +28,13 @@ public class MainActivity extends Activity implements OnClickListener {
 	private MediaRecorder mediaRecorder = new MediaRecorder();
 	private MediaPlayer mediaPlayer;
 	private File audioFile;
+
+	private ListView myListView1;
+	private ArrayAdapter<String> adapter;// 用于ListView的适配器
+	private ArrayList<String> recordFiles = new ArrayList<String>();
+	private File sdCardPath;
+
+	private boolean sdCardExist;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +44,75 @@ public class MainActivity extends Activity implements OnClickListener {
 		Button btnStart = (Button) findViewById(R.id.btnStart);
 		Button btnStop = (Button) findViewById(R.id.btnStop);
 		Button btnPlay = (Button) findViewById(R.id.btnPlay);
+		Button btnUpload = (Button) findViewById(R.id.btnUpload);
 		btnStart.setOnClickListener(this);
 		btnStop.setOnClickListener(this);
 		btnPlay.setOnClickListener(this);
+		btnUpload.setOnClickListener(this);
+
+		myListView1 = (ListView) findViewById(R.id.ListView01);
+
+		recordFiles.add("aaa");
+		recordFiles.add("bbb");
+		adapter = new ArrayAdapter<String>(this, R.layout.my_simple_list_item,
+				R.id.checktv_title, recordFiles);
+		/* 将ArrayAdapter添加ListView对象中 */
+		myListView1.setAdapter(adapter);
+
+		myListView1.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		myListView1.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				// System.out.println("onItemClick");
+				// System.out.println(parent + " " +view+ " "+ position + " " +
+				// id);
+				CheckedTextView checktv = (CheckedTextView) parent.getChildAt(
+						position).findViewById(R.id.checktv_title);
+				if (checktv.isChecked()) {
+					checktv.setChecked(false);
+				} else {
+					checktv.setChecked(true);
+				}
+			}
+		});
+		myListView1.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				System.out.println("onItemLongClick");
+				System.out.println(parent + " " + view + " " + position + " "
+						+ id);
+				return false;
+			}
+		});
+		myListView1.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				System.out.println("onItemSelected");
+				System.out.println(parent + " " + view + " " + position + " "
+						+ id);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				System.out.println("onNothingSelected");
+
+			}
+		});
+		/* 判断SD Card是否插入 */
+		sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED);
+		System.out.println("sdCardExist:" + sdCardExist);
+		/* 取得SD Card路径作为录音的文件位置 */
+		// if (sdCardExist) {
+		sdCardPath = Environment.getExternalStorageDirectory();
+		System.out.println("sdCardPath:" + sdCardPath);
+		// }
 	}
 
 	@Override
@@ -49,6 +131,8 @@ public class MainActivity extends Activity implements OnClickListener {
 						.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 				// 创建一个临时的音频输出文件
 				audioFile = File.createTempFile("record_", ".amr");
+				// new File(sdCardPath)
+				System.out.println(audioFile.getAbsolutePath());
 				mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
 				mediaRecorder.prepare();
 				mediaRecorder.start();
@@ -57,6 +141,8 @@ public class MainActivity extends Activity implements OnClickListener {
 			case R.id.btnStop:
 				if (audioFile != null) {
 					mediaRecorder.stop();
+					// 添加到adapter
+					adapter.add(audioFile.getName());
 				}
 				msg = "已经停止录音.";
 				break;
@@ -76,6 +162,13 @@ public class MainActivity extends Activity implements OnClickListener {
 								}
 							});
 					msg = "正在播放录音...";
+				}
+				break;
+				
+			case R.id.btnUpload:
+				System.out.println("upload");
+				if (audioFile != null) {
+					
 				}
 				break;
 			}

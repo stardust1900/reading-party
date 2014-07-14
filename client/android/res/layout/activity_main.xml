@@ -1,36 +1,53 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="${packageName}.${activityClass}" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/white"
+    android:orientation="vertical" >
 
-    <!-- <TextView
+    <!--
+         <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
-     -->
-	    <Button
-	        android:id="@+id/btnStart"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="录音" />
+        android:text="@string/hello_world" /> -->
 
-	    <Button
-	        android:id="@+id/btnStop"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	         android:layout_alignParentTop="true"
-	        android:layout_marginLeft="30dp"
-	        android:layout_toRightOf="@+id/btnStart"
-	        android:text="停止" />
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
-	    <Button
-	        android:id="@+id/btnPlay"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_alignParentTop="true"
-	        android:layout_marginLeft="30dp"
-	        android:layout_toRightOf="@+id/btnStop"
-	        android:text="播放" />
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="录音" />
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="停止" />
+
+        <Button
+            android:id="@+id/btnPlay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="播放" />
+        
+         <Button
+            android:id="@+id/btnUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="上传" />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/ListView01"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/black" >
+    </ListView>
+
+</LinearLayout>
