@@ -8,7 +8,8 @@
          <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" /> -->
+        android:text="@string/hello_world" />
+    -->
 
     <LinearLayout
         android:id="@+id/LinearLayout01"
@@ -34,8 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="播放" />
-        
-         <Button
+
+        <Button
             android:id="@+id/btnUpload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,8 +47,23 @@
     <ListView
         android:id="@+id/ListView01"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="222dp"
+        android:layout_weight="0.75"
         android:background="@drawable/black" >
     </ListView>
+
+    <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/btnJump"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="跳转" />
+    </LinearLayout>
 
 </LinearLayout>

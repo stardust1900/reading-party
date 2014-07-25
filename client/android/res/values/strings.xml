@@ -3,5 +3,7 @@
 
     <string name="app_name">ReadingParty</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_play">PlayActivity</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
