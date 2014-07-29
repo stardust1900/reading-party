@@ -42,6 +42,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 
 	public Player(SeekBar skbProgress) {
 		this.skbProgress = skbProgress;
+		
 		try {
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

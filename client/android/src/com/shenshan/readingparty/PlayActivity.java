@@ -1,8 +1,8 @@
 package com.shenshan.readingparty;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,7 +12,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
-import android.os.Build;
 
 public class PlayActivity extends Activity {
 	private Button btnPause, btnPlayUrl, btnStop;
@@ -23,24 +22,40 @@ public class PlayActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_play);
-
-		if (savedInstanceState == null) {
+		this.setTitle("在线音乐播放");
+		  
+        btnPlayUrl = (Button) this.findViewById(R.id.btnPlayUrl);  
+        btnPlayUrl.setOnClickListener(new ClickEvent());  
+  
+        btnPause = (Button) this.findViewById(R.id.btnPause);  
+        btnPause.setOnClickListener(new ClickEvent());  
+  
+        btnStop = (Button) this.findViewById(R.id.btnStop);  
+        btnStop.setOnClickListener(new ClickEvent());  
+  
+        skbProgress = (SeekBar) this.findViewById(R.id.skbProgress);  
+        skbProgress.setOnSeekBarChangeListener(new SeekBarChangeEvent());  
+        player = new Player(skbProgress);  
+        
+        
+		/*if (savedInstanceState == null) {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
+		}*/
 	}
 
 	class ClickEvent implements OnClickListener {
 
 		@Override
-		public void onClick(View arg0) {
-			if (arg0 == btnPause) {
+		public void onClick(View view) {
+			System.out.println("click "+view);
+			if (view == btnPause) {
 				player.pause();
-			} else if (arg0 == btnPlayUrl) {
+			} else if (view == btnPlayUrl) {
 				//TODO 在百度MP3里随便搜索到的,大家可以试试别的链接
-				String url = "";
+				String url = "http://yinyueshiting.baidu.com/data2/music/47880046/2230211406606461128.mp3?xcode=dbea0069952e953c280517a260f331cb63e0764ef3af3153";
 				player.playUrl(url);
-			} else if (arg0 == btnStop) {
+			} else if (view == btnStop) {
 				player.stop();
 			}
 		}

@@ -9,7 +9,7 @@
             android:layout_height="wrap_content" android:layout_width="wrap_content">  
             <Button android:layout_width="wrap_content"  
                 android:layout_height="wrap_content" android:id="@+id/btnPlayUrl"  
-                android:text="播放网络音频"></Button>  
+                android:text="播放"></Button>  
             <Button android:layout_height="wrap_content" android:id="@+id/btnPause"  
                 android:text="暂停" android:layout_width="80dip"></Button>  
             <Button android:layout_height="wrap_content"  
