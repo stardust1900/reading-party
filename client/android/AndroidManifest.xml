@@ -29,6 +29,10 @@
             android:name="com.shenshan.readingparty.PlayActivity"
             android:label="@string/title_activity_play" >
         </activity>
+        <activity
+            android:name="com.shenshan.readingparty.TimelineActivity"
+            android:label="@string/title_activity_timeline" >
+        </activity>
     </application>
 
 </manifest>

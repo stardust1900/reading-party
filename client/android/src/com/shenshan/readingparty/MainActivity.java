@@ -186,7 +186,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		@Override
 		public void onClick(View arg0) {
 			Intent intent=new Intent();
-			intent.setClass(MainActivity.this, PlayActivity.class);
+			intent.setClass(MainActivity.this, TimelineActivity.class);
 			
 			startActivity(intent);
 		}
