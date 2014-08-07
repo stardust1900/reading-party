@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	private File audioFile;
 
 	private ListView myListView1;
-	private ArrayAdapter<String> adapter;// ÓÃÓÚListViewµÄÊÊÅäÆ÷
+	private ArrayAdapter<String> adapter;// ç”¨äºListViewçš„é€‚é…å™¨
 	private ArrayList<String> recordFiles = new ArrayList<String>();
 	private File sdCardPath;
 
@@ -57,7 +57,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		adapter = new ArrayAdapter<String>(this, R.layout.my_simple_list_item,
 				R.id.checktv_title, recordFiles);
-		/* ½«ArrayAdapterÌí¼ÓListView¶ÔÏóÖĞ */
+		/* å°†ArrayAdapteræ·»åŠ ListViewå¯¹è±¡ä¸­ */
 		myListView1.setAdapter(adapter);
 
 		myListView1.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -105,11 +105,11 @@ public class MainActivity extends Activity implements OnClickListener {
 
 			}
 		});
-		/* ÅĞ¶ÏSD CardÊÇ·ñ²åÈë */
+		/* åˆ¤æ–­SD Cardæ˜¯å¦æ’å…¥ */
 		sdCardExist = Environment.getExternalStorageState().equals(
 				android.os.Environment.MEDIA_MOUNTED);
 		System.out.println("sdCardExist:" + sdCardExist);
-		/* È¡µÃSD CardÂ·¾¶×÷ÎªÂ¼ÒôµÄÎÄ¼şÎ»ÖÃ */
+		/* å–å¾—SD Cardè·¯å¾„ä½œä¸ºå½•éŸ³çš„æ–‡ä»¶ä½ç½® */
 		// if (sdCardExist) {
 		sdCardPath = Environment.getExternalStorageDirectory();
 		System.out.println("sdCardPath:" + sdCardPath);
@@ -122,30 +122,30 @@ public class MainActivity extends Activity implements OnClickListener {
 			String msg = "";
 			switch (view.getId()) {
 			case R.id.btnStart:
-				// ÉèÖÃÒôÆµÀ´Ô´(Ò»°ãÎªÂó¿Ë·ç)
+				// è®¾ç½®éŸ³é¢‘æ¥æº(ä¸€èˆ¬ä¸ºéº¦å…‹é£)
 				mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-				// ÉèÖÃÒôÆµÊä³ö¸ñÊ½£¨Ä¬ÈÏµÄÊä³ö¸ñÊ½£©
+				// è®¾ç½®éŸ³é¢‘è¾“å‡ºæ ¼å¼ï¼ˆé»˜è®¤çš„è¾“å‡ºæ ¼å¼ï¼‰
 				mediaRecorder
 						.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
-				// ÉèÖÃÒôÆµ±àÂë·½Ê½£¨Ä¬ÈÏµÄ±àÂë·½Ê½£©
+				// è®¾ç½®éŸ³é¢‘ç¼–ç æ–¹å¼ï¼ˆé»˜è®¤çš„ç¼–ç æ–¹å¼ï¼‰
 				mediaRecorder
 						.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
-				// ´´½¨Ò»¸öÁÙÊ±µÄÒôÆµÊä³öÎÄ¼ş
+				// åˆ›å»ºä¸€ä¸ªä¸´æ—¶çš„éŸ³é¢‘è¾“å‡ºæ–‡ä»¶
 				audioFile = File.createTempFile("record_", ".amr");
 				// new File(sdCardPath)
 				System.out.println(audioFile.getAbsolutePath());
 				mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
 				mediaRecorder.prepare();
 				mediaRecorder.start();
-				msg = "ÕıÔÚÂ¼Òô...";
+				msg = "æ­£åœ¨å½•éŸ³...";
 				break;
 			case R.id.btnStop:
 				if (audioFile != null) {
 					mediaRecorder.stop();
-					// Ìí¼Óµ½adapter
+					// æ·»åŠ åˆ°adapter
 					adapter.add(audioFile.getName());
 				}
-				msg = "ÒÑ¾­Í£Ö¹Â¼Òô.";
+				msg = "å·²ç»åœæ­¢å½•éŸ³.";
 				break;
 			case R.id.btnPlay:
 				if (audioFile != null) {
@@ -158,11 +158,11 @@ public class MainActivity extends Activity implements OnClickListener {
 							.setOnCompletionListener(new OnCompletionListener() {
 								@Override
 								public void onCompletion(MediaPlayer mp) {
-									setTitle("Â¼Òô²¥·ÅÍê±Ï.");
+									setTitle("å½•éŸ³æ’­æ”¾å®Œæ¯•.");
 
 								}
 							});
-					msg = "ÕıÔÚ²¥·ÅÂ¼Òô...";
+					msg = "æ­£åœ¨æ’­æ”¾å½•éŸ³...";
 				}
 				break;
 

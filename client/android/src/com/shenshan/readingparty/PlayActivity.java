@@ -22,7 +22,7 @@ public class PlayActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_play);
-		this.setTitle("ÔÚÏßÒôÀÖ²¥·Å");
+		this.setTitle("åœ¨çº¿éŸ³ä¹æ’­æ”¾");
 		  
         btnPlayUrl = (Button) this.findViewById(R.id.btnPlayUrl);  
         btnPlayUrl.setOnClickListener(new ClickEvent());  
@@ -52,7 +52,7 @@ public class PlayActivity extends Activity {
 			if (view == btnPause) {
 				player.pause();
 			} else if (view == btnPlayUrl) {
-				//TODO ÔÚ°Ù¶ÈMP3ÀïËæ±ãËÑË÷µ½µÄ,´ó¼Ò¿ÉÒÔÊÔÊÔ±ğµÄÁ´½Ó
+				//TODO åœ¨ç™¾åº¦MP3é‡Œéšä¾¿æœç´¢åˆ°çš„,å¤§å®¶å¯ä»¥è¯•è¯•åˆ«çš„é“¾æ¥
 				String url = "http://yinyueshiting.baidu.com/data2/music/47880046/2230211406606461128.mp3?xcode=dbea0069952e953c280517a260f331cb63e0764ef3af3153";
 				player.playUrl(url);
 			} else if (view == btnStop) {
@@ -67,7 +67,7 @@ public class PlayActivity extends Activity {
 		@Override
 		public void onProgressChanged(SeekBar seekBar, int progress,
 				boolean fromUser) {
-			// Ô­±¾ÊÇ(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
+			// åŸæœ¬æ˜¯(progress/seekBar.getMax())*player.mediaPlayer.getDuration()
 			this.progress = progress * player.mediaPlayer.getDuration()
 					/ seekBar.getMax();
 		}
@@ -79,7 +79,7 @@ public class PlayActivity extends Activity {
 
 		@Override
 		public void onStopTrackingTouch(SeekBar seekBar) {
-			// seekTo()µÄ²ÎÊıÊÇÏà¶ÔÓëÓ°Æ¬Ê±¼äµÄÊı×Ö£¬¶ø²»ÊÇÓëseekBar.getMax()Ïà¶ÔµÄÊı×Ö
+			// seekTo()çš„å‚æ•°æ˜¯ç›¸å¯¹ä¸å½±ç‰‡æ—¶é—´çš„æ•°å­—ï¼Œè€Œä¸æ˜¯ä¸seekBar.getMax()ç›¸å¯¹çš„æ•°å­—
 			player.mediaPlayer.seekTo(progress);
 		}
 	}

@@ -48,7 +48,11 @@ public class TimelineActivity extends Activity {
 		adapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, mListItems);
 		
-		mListView.setAdapter(adapter);
+		//mListView.setAdapter(adapter);
+		
+		StatusItemAdapter statusAdapter = new StatusItemAdapter(this);
+		statusAdapter.setData();
+		mListView.setAdapter(statusAdapter);
 	}
 	
 	private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {
