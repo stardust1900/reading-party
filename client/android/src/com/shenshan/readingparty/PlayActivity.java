@@ -53,7 +53,7 @@ public class PlayActivity extends Activity {
 				player.pause();
 			} else if (view == btnPlayUrl) {
 				//TODO 在百度MP3里随便搜索到的,大家可以试试别的链接
-				String url = "http://yinyueshiting.baidu.com/data2/music/47880046/2230211406606461128.mp3?xcode=dbea0069952e953c280517a260f331cb63e0764ef3af3153";
+				String url = "http://yinyueshiting.baidu.com/data2/music/122112390/12012502946800128.mp3?xcode=e8d534c2286a1e82c08beaf0ed928e9d3f8882ee658cd7de";
 				player.playUrl(url);
 			} else if (view == btnStop) {
 				player.stop();

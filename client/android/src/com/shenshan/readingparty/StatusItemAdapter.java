@@ -1,5 +1,6 @@
 package com.shenshan.readingparty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,13 +68,36 @@ public class StatusItemAdapter extends BaseAdapter {
 		final Drawable palyDrawable = convertView.getResources().getDrawable(R.drawable.play);
 		final Drawable pauseDrawable = convertView.getResources().getDrawable(R.drawable.pause);
 		imgBtn.setBackground(palyDrawable);
+		final MediaPlayer   player  =   new MediaPlayer();
+		player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+		try {
+			player.setDataSource("http://yinyueshiting.baidu.com/data2/music/122112390/12012502946800128.mp3?xcode=e8d534c2286a1e82c08beaf0ed928e9d3f8882ee658cd7de");
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		imgBtn.setOnClickListener(new OnClickListener(){
+						
 			@Override
 			public void onClick(View view) {
 				if(palyDrawable == view.getBackground()) {
 					view.setBackground(pauseDrawable);
+					try {
+						player.prepare();
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					player.start();
 				}else{
 					view.setBackground(palyDrawable);
+					player.stop();
 				}
 			} });
 		

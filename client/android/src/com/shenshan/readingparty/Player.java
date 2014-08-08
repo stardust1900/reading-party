@@ -62,6 +62,7 @@ public class Player implements OnBufferingUpdateListener, OnCompletionListener,
 		try {
 			mediaPlayer.reset();
 			mediaPlayer.setDataSource(videoUrl);
+			//mediaPlayer.prepareAsync();
 			mediaPlayer.prepare();// prepare之后自动播放
 			// mediaPlayer.start();
 		} catch (IllegalArgumentException e) {
