@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class HttpUtils {
 	/**
-	 * Í¨¹ıÆ´½ÓµÄ·½Ê½¹¹ÔìÇëÇóÄÚÈİ£¬ÊµÏÖ²ÎÊı´«ÊäÒÔ¼°ÎÄ¼ş´«Êä
+	 * é€šè¿‡æ‹¼æ¥çš„æ–¹å¼æ„é€ è¯·æ±‚å†…å®¹ï¼Œå®ç°å‚æ•°ä¼ è¾“ä»¥åŠæ–‡ä»¶ä¼ è¾“
 	 * 
 	 * @param actionUrl
 	 * @param params
@@ -29,17 +29,17 @@ public class HttpUtils {
 
 		URL uri = new URL(actionUrl);
 		HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
-		conn.setReadTimeout(5 * 1000); // »º´æµÄ×î³¤Ê±¼ä
-		conn.setDoInput(true);// ÔÊĞíÊäÈë
-		conn.setDoOutput(true);// ÔÊĞíÊä³ö
-		conn.setUseCaches(false); // ²»ÔÊĞíÊ¹ÓÃ»º´æ
+		conn.setReadTimeout(5 * 1000); // ç¼“å­˜çš„æœ€é•¿æ—¶é—´
+		conn.setDoInput(true);// å…è®¸è¾“å…¥
+		conn.setDoOutput(true);// å…è®¸è¾“å‡º
+		conn.setUseCaches(false); // ä¸å…è®¸ä½¿ç”¨ç¼“å­˜
 		conn.setRequestMethod("POST");
 		conn.setRequestProperty("connection", "keep-alive");
 		conn.setRequestProperty("Charsert", "UTF-8");
 		conn.setRequestProperty("Content-Type", MULTIPART_FROM_DATA
 				+ ";boundary=" + BOUNDARY);
 
-		// Ê×ÏÈ×éÆ´ÎÄ±¾ÀàĞÍµÄ²ÎÊı
+		// é¦–å…ˆç»„æ‹¼æ–‡æœ¬ç±»å‹çš„å‚æ•°
 		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, String> entry : params.entrySet()) {
 			sb.append(PREFIX);
@@ -57,7 +57,7 @@ public class HttpUtils {
 		DataOutputStream outStream = new DataOutputStream(
 				conn.getOutputStream());
 		outStream.write(sb.toString().getBytes());
-		// ·¢ËÍÎÄ¼şÊı¾İ
+		// å‘é€æ–‡ä»¶æ•°æ®
 		if (files != null) {
 			int i = 0;
 			for (Map.Entry<String, File> file : files.entrySet()) {
@@ -85,12 +85,12 @@ public class HttpUtils {
 			}
 		}
 
-		// ÇëÇó½áÊø±êÖ¾
+		// è¯·æ±‚ç»“æŸæ ‡å¿—
 		byte[] end_data = (PREFIX + BOUNDARY + PREFIX + LINEND).getBytes();
 		outStream.write(end_data);
 		outStream.flush();
 
-		// µÃµ½ÏìÓ¦Âë
+		// å¾—åˆ°å“åº”ç 
 		int res = conn.getResponseCode();
 		InputStream in = null;
 		if (res == 200) {
