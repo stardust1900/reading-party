@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
+from django.conf import settings
 
 # Create your views here.
 def list(request):
@@ -43,6 +44,9 @@ def upload(request):
 	    if form.is_valid():
 		    newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'],reader = request.user)
 		    newSound.save()
+		    #mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT, list) else settings.MEDIA_ROOT
+		    print(mediaRoot)
+		    print(newSound.soundfile)
 	    else:
 		    return render_to_response('upload.html',{'form': form},context_instance=RequestContext(request));
 	# else:
