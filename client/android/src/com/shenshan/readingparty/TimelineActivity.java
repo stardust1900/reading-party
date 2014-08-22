@@ -8,9 +8,13 @@ import com.costum.android.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.costum.android.widget.PullToRefreshListView.OnRefreshListener;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 
 public class TimelineActivity extends Activity {
 	private PullAndLoadListView mListView = null;
@@ -53,6 +57,18 @@ public class TimelineActivity extends Activity {
 		StatusItemAdapter statusAdapter = new StatusItemAdapter(this);
 		statusAdapter.setData();
 		mListView.setAdapter(statusAdapter);
+		
+		//录音按钮
+		Button btnRecord = (Button) findViewById(R.id.btnRecord);
+		btnRecord.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View arg0) {
+				Intent intent=new Intent();
+				intent.setClass(TimelineActivity.this, PostActivity.class);
+				startActivity(intent);
+			}
+			
+		});
 	}
 	
 	private class LoadMoreDataTask extends AsyncTask<Void, Void, Void> {

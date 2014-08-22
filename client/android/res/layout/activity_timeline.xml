@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
@@ -25,6 +25,22 @@
                 android:dividerHeight="0.0dip"
                 android:layout_weight="1" />
         </LinearLayout>
-    </LinearLayout>
+        <LinearLayout
+        android:id="@+id/LinearLayout01"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_gravity="bottom"
+        android:orientation="vertical"  >
+
+        <Button
+            android:id="@+id/btnRecord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="200dp"
+            android:text="录音" />
+
+    	</LinearLayout>
+    	
+    </FrameLayout>
 
 </merge>

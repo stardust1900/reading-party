@@ -23,7 +23,7 @@ import android.widget.CheckedTextView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class PostActivity extends Activity implements OnClickListener {
 	private static final String TAG = "uploadFile";
 
 	private MediaRecorder mediaRecorder = new MediaRecorder();
@@ -186,7 +186,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		@Override
 		public void onClick(View arg0) {
 			Intent intent=new Intent();
-			intent.setClass(MainActivity.this, TimelineActivity.class);
+			intent.setClass(PostActivity.this, TimelineActivity.class);
 			//intent.setClass(MainActivity.this, PlayActivity.class);
 			startActivity(intent);
 		}

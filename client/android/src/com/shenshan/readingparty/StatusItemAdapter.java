@@ -108,7 +108,7 @@ public class StatusItemAdapter extends BaseAdapter {
         // 新建一个集合类，用于存放多条数据  
         ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();  
         HashMap<String, Object> map = null;  
-        for (int i = 1; i <= 40; i++) {  
+        for (int i = 1; i <= 10; i++) {  
             map = new HashMap<String, Object>();  
             map.put("title", "人物" + i);  
             map.put("time", "9月20日");
