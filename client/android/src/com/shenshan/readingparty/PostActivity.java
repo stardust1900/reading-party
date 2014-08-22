@@ -46,12 +46,10 @@ public class PostActivity extends Activity implements OnClickListener {
 		Button btnStop = (Button) findViewById(R.id.btnStop);
 		Button btnPlay = (Button) findViewById(R.id.btnPlay);
 		Button btnUpload = (Button) findViewById(R.id.btnUpload);
-		Button btnJump = (Button) findViewById(R.id.btnJump);
 		btnStart.setOnClickListener(this);
 		btnStop.setOnClickListener(this);
 		btnPlay.setOnClickListener(this);
 		btnUpload.setOnClickListener(this);
-		btnJump.setOnClickListener(new JumpListener());
 
 		myListView1 = (ListView) findViewById(R.id.ListView01);
 
@@ -179,18 +177,6 @@ public class PostActivity extends Activity implements OnClickListener {
 			Log.e(TAG, "", e);
 		}
 
-	}
-
-	class JumpListener implements OnClickListener {
-
-		@Override
-		public void onClick(View arg0) {
-			Intent intent=new Intent();
-			intent.setClass(PostActivity.this, TimelineActivity.class);
-			//intent.setClass(MainActivity.this, PlayActivity.class);
-			startActivity(intent);
-		}
-		
 	}
 }
 
