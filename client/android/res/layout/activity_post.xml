@@ -11,10 +11,29 @@
         android:text="@string/hello_world" />
     -->
 
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.75"
+        android:ems="10"
+        android:inputType="textMultiLine" >
+        <requestFocus />
+    </EditText>
+
+ <ListView
+        android:id="@+id/ListView01"
+        android:layout_width="fill_parent"
+        android:layout_height="222dp"
+        android:layout_weight="0.75"
+        android:background="@drawable/black" >
+    </ListView>
+
     <LinearLayout
         android:id="@+id/LinearLayout01"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content" 
+        android:layout_gravity="bottom">
 
         <Button
             android:id="@+id/btnStart"
@@ -41,16 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:text="上传" />
+            android:text="发布" />
     </LinearLayout>
 
-    <ListView
-        android:id="@+id/ListView01"
-        android:layout_width="fill_parent"
-        android:layout_height="222dp"
-        android:layout_weight="0.75"
-        android:background="@drawable/black" >
-    </ListView>
-
+   
 
 </LinearLayout>

@@ -1,10 +1,13 @@
 package com.shenshan.readingparty;
 
 import java.io.File;
+import java.io.FilenameFilter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
@@ -24,8 +27,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class PostActivity extends Activity implements OnClickListener {
-	private static final String TAG = "uploadFile";
-
+	private static final String TAG = "PostActivity";
+	private static final SimpleDateFormat SDF= new SimpleDateFormat("yyyyMMdd_HHmmss",Locale.CHINA);
 	private MediaRecorder mediaRecorder = new MediaRecorder();
 	private MediaPlayer mediaPlayer;
 	private File audioFile;
@@ -33,14 +36,26 @@ public class PostActivity extends Activity implements OnClickListener {
 	private ListView myListView1;
 	private ArrayAdapter<String> adapter;// 用于ListView的适配器
 	private ArrayList<String> recordFiles = new ArrayList<String>();
-	private File sdCardPath;
-
-	private boolean sdCardExist;
-
+	private File soundPath;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_post);
+		/* 判断SD Card是否插入 */
+		/* 取得SD Card路径作为录音的文件位置 */
+		if (android.os.Environment.MEDIA_MOUNTED.equals(Environment
+				.getExternalStorageState())) {
+			File sdCardPath = Environment.getExternalStorageDirectory();
+			soundPath = new File(sdCardPath, "readingParty"
+					+ File.separator + "audios");
+			if (!soundPath.exists()) {
+				soundPath.mkdirs();
+			}
+		} else {
+			Toast.makeText(this, "在您的设备上没有发现sd卡！", Toast.LENGTH_LONG).show();
+			return;
+		}
 
 		Button btnStart = (Button) findViewById(R.id.btnStart);
 		Button btnStop = (Button) findViewById(R.id.btnStop);
@@ -57,7 +72,18 @@ public class PostActivity extends Activity implements OnClickListener {
 				R.id.checktv_title, recordFiles);
 		/* 将ArrayAdapter添加ListView对象中 */
 		myListView1.setAdapter(adapter);
-
+		String[] audios = soundPath.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File f, String path) {
+				return path.endsWith(".amr");
+			}
+		});
+		//添加已存在文件
+		if(audios !=null){
+			for(String s : audios) {
+				adapter.add(s);
+			}
+		}
 		myListView1.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 		myListView1.setOnItemClickListener(new OnItemClickListener() {
 
@@ -103,21 +129,14 @@ public class PostActivity extends Activity implements OnClickListener {
 
 			}
 		});
-		/* 判断SD Card是否插入 */
-		sdCardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED);
-		System.out.println("sdCardExist:" + sdCardExist);
-		/* 取得SD Card路径作为录音的文件位置 */
-		// if (sdCardExist) {
-		sdCardPath = Environment.getExternalStorageDirectory();
-		System.out.println("sdCardPath:" + sdCardPath);
-		// }
+
 	}
 
 	@Override
 	public void onClick(View view) {
 		try {
 			String msg = "";
+			//TODO 增加爱删除按钮 将录音和停止按钮合并
 			switch (view.getId()) {
 			case R.id.btnStart:
 				// 设置音频来源(一般为麦克风)
@@ -129,9 +148,9 @@ public class PostActivity extends Activity implements OnClickListener {
 				mediaRecorder
 						.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 				// 创建一个临时的音频输出文件
-				audioFile = File.createTempFile("record_", ".amr");
+				audioFile = new File(soundPath, SDF.format(new Date())+".amr");
+				audioFile.createNewFile();
 				// new File(sdCardPath)
-				System.out.println(audioFile.getAbsolutePath());
 				mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
 				mediaRecorder.prepare();
 				mediaRecorder.start();
@@ -165,7 +184,7 @@ public class PostActivity extends Activity implements OnClickListener {
 				break;
 
 			case R.id.btnUpload:
-				System.out.println("upload :"+audioFile);
+				System.out.println("upload :" + audioFile);
 				if (audioFile != null) {
 					System.out.println("111");
 				}
@@ -179,4 +198,3 @@ public class PostActivity extends Activity implements OnClickListener {
 
 	}
 }
-
