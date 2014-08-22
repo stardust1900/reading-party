@@ -40,7 +40,7 @@ public class PostActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_post);
 
 		Button btnStart = (Button) findViewById(R.id.btnStart);
 		Button btnStop = (Button) findViewById(R.id.btnStop);
