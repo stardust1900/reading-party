@@ -7,8 +7,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -45,8 +48,9 @@ public class PostActivity extends Activity implements OnClickListener {
 	private ArrayList<String> recordFiles = new ArrayList<String>();
 	private File soundPath;
 
-	private List<String> checkedItems = new ArrayList<String>();
+	private Map<Integer,String> checkedItems = new HashMap<Integer,String>();
 
+	private AdapterView adapterView = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,9 +82,10 @@ public class PostActivity extends Activity implements OnClickListener {
 		myListView1 = (ListView) findViewById(R.id.ListView01);
 		
 		adapter = new ArrayAdapter<String>(this, R.layout.my_simple_list_item,
-				R.id.checktv_title, recordFiles);
+				R.id.checktv_title);
 		/* 将ArrayAdapter添加ListView对象中 */
 		myListView1.setAdapter(adapter);
+
 		// 加载已有录音
 		loadAudios();
 		myListView1.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
@@ -92,15 +97,18 @@ public class PostActivity extends Activity implements OnClickListener {
 				// System.out.println("onItemClick");
 				// System.out.println(parent + " " +view+ " "+ position + " " +
 				// id);
+				if(adapterView == null) {
+					adapterView = parent;
+				}
 				CheckedTextView checktv = (CheckedTextView) parent.getChildAt(
 						position).findViewById(R.id.checktv_title);
-
+				
 				if (checktv.isChecked()) {
 					checktv.setChecked(false);
-					checkedItems.remove(checktv.getText().toString());
+					checkedItems.remove(position);
 				} else {
 					checktv.setChecked(true);
-					checkedItems.add(checktv.getText().toString());
+					checkedItems.put(position,checktv.getText().toString());
 				}
 			}
 		});
@@ -199,7 +207,7 @@ public class PostActivity extends Activity implements OnClickListener {
 			case R.id.btnRemove:
 				myListView1.getCheckedItemCount();
 				myListView1.getCheckedItemIds();
-				
+
 				if (checkedItems.isEmpty()) {
 					msg = "请选择录音.";
 				} else {
@@ -215,8 +223,8 @@ public class PostActivity extends Activity implements OnClickListener {
 					} else {
 						button.setText(getResources().getString(R.string.stop));
 						ArrayDeque<String> playList = new ArrayDeque<String>(
-								checkedItems);
-						playList.addAll(checkedItems);
+								checkedItems.values());
+						//playList.addAll(checkedItems);
 						playAudios(playList);
 						msg = "正在播放录音...";
 
@@ -277,16 +285,22 @@ public class PostActivity extends Activity implements OnClickListener {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				for (String s : checkedItems) {
-					File f = new File(soundPath, s);
+				for (Entry<Integer,String> entry : checkedItems.entrySet()) {
+					File f = new File(soundPath, entry.getValue());
 					if (f.exists()) {
 						f.delete();
 					}
-					
-					adapter.remove(s);
+					//myListView1.removeViewAt(entry.getKey());
+					if(adapterView != null) {
+						CheckedTextView checktv =(CheckedTextView)adapterView.getChildAt(entry.getKey()).findViewById(R.id.checktv_title);
+						checktv.setChecked(false);
+					}
+					adapter.remove(entry.getValue());
 					adapter.notifyDataSetChanged();
+					
 				}
 				checkedItems.clear();
+				//myListView1.getItemAtPosition(position)
 				//loadAudios();
 				// PostActivity.this.finish();
 			}
