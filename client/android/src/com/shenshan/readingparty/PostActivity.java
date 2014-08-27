@@ -5,13 +5,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -23,6 +18,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -45,12 +41,12 @@ public class PostActivity extends Activity implements OnClickListener {
 
 	private ListView myListView1;
 	private ArrayAdapter<String> adapter;// 用于ListView的适配器
-	private ArrayList<String> recordFiles = new ArrayList<String>();
 	private File soundPath;
 
-	private Map<Integer,String> checkedItems = new HashMap<Integer,String>();
+	private SparseArray<String> checkedItems = new SparseArray<String>();
 
-	private AdapterView adapterView = null;
+	private AdapterView<?> adapterView = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -80,7 +76,7 @@ public class PostActivity extends Activity implements OnClickListener {
 		btnUpload.setOnClickListener(this);
 
 		myListView1 = (ListView) findViewById(R.id.ListView01);
-		
+
 		adapter = new ArrayAdapter<String>(this, R.layout.my_simple_list_item,
 				R.id.checktv_title);
 		/* 将ArrayAdapter添加ListView对象中 */
@@ -97,18 +93,18 @@ public class PostActivity extends Activity implements OnClickListener {
 				// System.out.println("onItemClick");
 				// System.out.println(parent + " " +view+ " "+ position + " " +
 				// id);
-				if(adapterView == null) {
+				if (adapterView == null) {
 					adapterView = parent;
 				}
 				CheckedTextView checktv = (CheckedTextView) parent.getChildAt(
 						position).findViewById(R.id.checktv_title);
-				
+
 				if (checktv.isChecked()) {
 					checktv.setChecked(false);
 					checkedItems.remove(position);
 				} else {
 					checktv.setChecked(true);
-					checkedItems.put(position,checktv.getText().toString());
+					checkedItems.put(position, checktv.getText().toString());
 				}
 			}
 		});
@@ -164,7 +160,6 @@ public class PostActivity extends Activity implements OnClickListener {
 		try {
 			String msg = "";
 			Button button = (Button) view;
-			// TODO 增加爱删除按钮 将录音和停止按钮合并
 			switch (view.getId()) {
 			case R.id.btnStart:
 				if (getResources().getString(R.string.record).equals(
@@ -205,10 +200,8 @@ public class PostActivity extends Activity implements OnClickListener {
 				}
 				break;
 			case R.id.btnRemove:
-				myListView1.getCheckedItemCount();
-				myListView1.getCheckedItemIds();
 
-				if (checkedItems.isEmpty()) {
+				if (checkedItems.size() <= 0) {
 					msg = "请选择录音.";
 				} else {
 					dialog();
@@ -218,13 +211,15 @@ public class PostActivity extends Activity implements OnClickListener {
 			case R.id.btnPlay:
 				if (getResources().getString(R.string.play).equals(
 						button.getText().toString())) {
-					if (checkedItems.isEmpty()) {
+					if (checkedItems.size() <= 0) {
 						msg = "请选择录音";
 					} else {
 						button.setText(getResources().getString(R.string.stop));
-						ArrayDeque<String> playList = new ArrayDeque<String>(
-								checkedItems.values());
-						//playList.addAll(checkedItems);
+						ArrayDeque<String> playList = new ArrayDeque<String>();
+						for (int i = 0; i < checkedItems.size(); i++) {
+							playList.add(checkedItems.valueAt(i));
+						}
+						// playList.addAll(checkedItems);
 						playAudios(playList);
 						msg = "正在播放录音...";
 
@@ -285,23 +280,25 @@ public class PostActivity extends Activity implements OnClickListener {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
-				for (Entry<Integer,String> entry : checkedItems.entrySet()) {
-					File f = new File(soundPath, entry.getValue());
+				for (int i=0; i<checkedItems.size();i++) {
+					File f = new File(soundPath, checkedItems.valueAt(i));
 					if (f.exists()) {
 						f.delete();
 					}
-					//myListView1.removeViewAt(entry.getKey());
-					if(adapterView != null) {
-						CheckedTextView checktv =(CheckedTextView)adapterView.getChildAt(entry.getKey()).findViewById(R.id.checktv_title);
+					// myListView1.removeViewAt(entry.getKey());
+					if (adapterView != null) {
+						CheckedTextView checktv = (CheckedTextView) adapterView
+								.getChildAt(checkedItems.keyAt(i)).findViewById(
+										R.id.checktv_title);
 						checktv.setChecked(false);
 					}
-					adapter.remove(entry.getValue());
+					adapter.remove(checkedItems.valueAt(i));
 					adapter.notifyDataSetChanged();
-					
+
 				}
 				checkedItems.clear();
-				//myListView1.getItemAtPosition(position)
-				//loadAudios();
+				// myListView1.getItemAtPosition(position)
+				// loadAudios();
 				// PostActivity.this.finish();
 			}
 		});
