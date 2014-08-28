@@ -21,6 +21,7 @@ public class TimelineActivity extends Activity {
 	private LinkedList<String> mListItems;
 	
 	private ArrayAdapter<String> adapter;
+	private StatusItemAdapter statusAdapter;
 	private String[] mNames = { "Fabian", "Carlos", "Alex", "Andrea", "Karla",
 			"Freddy", "Lazaro", "Hector", "Carolina", "Edwin", "Jhon",
 			"Edelmira", "Andres" };
@@ -28,6 +29,8 @@ public class TimelineActivity extends Activity {
 	private String[] mAnimals = { "Perro", "Gato", "Oveja", "Elefante", "Pez",
 			"Nicuro", "Bocachico", "Chucha", "Curie", "Raton", "Aguila",
 			"Leon", "Jirafa" };
+	
+	private QueryParams param = new QueryParams();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,15 +52,15 @@ public class TimelineActivity extends Activity {
 		mListItems = new LinkedList<String>();
 		mListItems.addAll(Arrays.asList(mNames));
 
-		adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_list_item_1, mListItems);
+//		adapter = new ArrayAdapter<String>(this,
+//				android.R.layout.simple_list_item_1, mListItems);
 		
 		//mListView.setAdapter(adapter);
 		
-		StatusItemAdapter statusAdapter = new StatusItemAdapter(this);
-		statusAdapter.setData();
+		statusAdapter = new StatusItemAdapter(this);
+		//statusAdapter.setData();
 		mListView.setAdapter(statusAdapter);
-		
+		new PullToRefreshDataTask().execute();
 		//录音按钮
 		Button btnRecord = (Button) findViewById(R.id.btnRecord);
 		btnRecord.setOnClickListener(new OnClickListener(){
@@ -83,7 +86,9 @@ public class TimelineActivity extends Activity {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 			}
-
+			param.setSinceId(null);
+			statusAdapter.setData(param);
+			
 			for (int i = 0; i < mNames.length; i++)
 				mListItems.add(mNames[i]);
 
@@ -94,7 +99,7 @@ public class TimelineActivity extends Activity {
 			mListItems.add("Added after load more");
 
 			// We need notify the adapter that the data have been changed
-			adapter.notifyDataSetChanged();
+			statusAdapter.notifyDataSetChanged();
 
 			// Call onLoadMoreComplete when the LoadMore task, has finished
 			mListView.onLoadMoreComplete();
@@ -120,17 +125,19 @@ public class TimelineActivity extends Activity {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 			}
-
+			param.setMaxId(null);
+			statusAdapter.setData(param);
+			
 			for (int i = 0; i < mAnimals.length; i++)
 				mListItems.addFirst(mAnimals[i]);
 			return null;
 		}
 		@Override
 		protected void onPostExecute(Void result) {
-			mListItems.addFirst("Added after pull to refresh");
+			//mListItems.addFirst("Added after pull to refresh");
 
 			// We need notify the adapter that the data have been changed
-			adapter.notifyDataSetChanged();
+			statusAdapter.notifyDataSetChanged();
 
 			// Call onLoadMoreComplete when the LoadMore task, has finished
 			mListView.onRefreshComplete();
@@ -145,4 +152,20 @@ public class TimelineActivity extends Activity {
 		}
 	}
 	
+}
+class QueryParams{
+	private String sinceId="";
+	private String maxId="";
+	public String getSinceId() {
+		return sinceId;
+	}
+	public void setSinceId(String sinceId) {
+		this.sinceId = sinceId;
+	}
+	public String getMaxId() {
+		return maxId;
+	}
+	public void setMaxId(String maxId) {
+		this.maxId = maxId;
+	}
 }

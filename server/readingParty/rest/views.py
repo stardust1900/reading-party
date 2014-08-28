@@ -14,10 +14,12 @@ def toJson(obj):
 	d['soundUrl']=obj.soundfile.url
 	return d
 def soundsToJson(sounds):
+	jsonResult={}
 	jsonList=[]
 	for sound in sounds:
 		jsonList.append(toJson(sound))
-	return jsonList
+	jsonResult['sounds'] = jsonList
+	return jsonResult
 def query(request):
 	since_id = request.GET.get('since_id')
 	max_id = request.GET.get('max_id')

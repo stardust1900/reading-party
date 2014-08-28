@@ -4,6 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import com.shenshan.readingparty.utils.HttpUtils;
+import com.shenshan.readingparty.utils.RestConst;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -22,19 +31,19 @@ import android.widget.TextView;
 
 public class StatusItemAdapter extends BaseAdapter {
 
-	private List<HashMap<String, Object>> mData;
-	
-	private LayoutInflater mInflater;//动态布局映射 
-	
+	private List<HashMap<String, Object>> mData = new ArrayList<HashMap<String, Object>>();
+
+	private LayoutInflater mInflater;// 动态布局映射
+
 	private ImageView img;
-	
+
 	private ImageButton imgBtn;
-	
+
 	public StatusItemAdapter(Context context) {
 		this.mInflater = LayoutInflater.from(context);
 	}
 
-	//决定ListView有几行可见 
+	// 决定ListView有几行可见
 	@Override
 	public int getCount() {
 		return mData.size();// ListView的条目数
@@ -53,25 +62,27 @@ public class StatusItemAdapter extends BaseAdapter {
 	@SuppressLint("NewApi")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		convertView = mInflater.inflate(R.layout.friend_list_item, null);//根据布局文件实例化view  
-		TextView title = (TextView) convertView.findViewById(R.id.title);//找某个控件
-		title.setText(mData.get(position).get("title").toString());//给该控件设置数据(数据从集合类中来)
-		TextView time = (TextView) convertView.findViewById(R.id.time);//找某个控件 
-		time.setText(mData.get(position).get("time").toString());//给该控件设置数据(数据从集合类中来) 
-		
+		convertView = mInflater.inflate(R.layout.friend_list_item, null);// 根据布局文件实例化view
+		TextView title = (TextView) convertView.findViewById(R.id.title);// 找某个控件
+		title.setText(mData.get(position).get("title").toString());// 给该控件设置数据(数据从集合类中来)
+		TextView time = (TextView) convertView.findViewById(R.id.time);// 找某个控件
+		time.setText(mData.get(position).get("time").toString());// 给该控件设置数据(数据从集合类中来)
+
 		TextView info = (TextView) convertView.findViewById(R.id.info);
 		info.setText(mData.get(position).get("info").toString());
-		//img = (ImageView) convertView.findViewById(R.id.img);		
-		//img.setBackgroundResource((Integer) mData.get(position).get("img")); 
+		// img = (ImageView) convertView.findViewById(R.id.img);
+		// img.setBackgroundResource((Integer) mData.get(position).get("img"));
 		imgBtn = (ImageButton) convertView.findViewById(R.id.imageButton1);
-		//imgBtn.setBackgroundResource(R.drawable.play);
-		final Drawable palyDrawable = convertView.getResources().getDrawable(R.drawable.play);
-		final Drawable pauseDrawable = convertView.getResources().getDrawable(R.drawable.pause);
+		// imgBtn.setBackgroundResource(R.drawable.play);
+		final Drawable palyDrawable = convertView.getResources().getDrawable(
+				R.drawable.play);
+		final Drawable pauseDrawable = convertView.getResources().getDrawable(
+				R.drawable.pause);
 		imgBtn.setBackground(palyDrawable);
-		final MediaPlayer   player  =   new MediaPlayer();
+		final MediaPlayer player = new MediaPlayer();
 		player.setAudioStreamType(AudioManager.STREAM_MUSIC);
 		try {
-			player.setDataSource("http://yinyueshiting.baidu.com/data2/music/122112390/12012502946800128.mp3?xcode=e8d534c2286a1e82c08beaf0ed928e9d3f8882ee658cd7de");
+			player.setDataSource(mData.get(position).get("url").toString());
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
@@ -81,11 +92,11 @@ public class StatusItemAdapter extends BaseAdapter {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		imgBtn.setOnClickListener(new OnClickListener(){
-						
+		imgBtn.setOnClickListener(new OnClickListener() {
+
 			@Override
 			public void onClick(View view) {
-				if(palyDrawable == view.getBackground()) {
+				if (palyDrawable == view.getBackground()) {
 					view.setBackground(pauseDrawable);
 					try {
 						player.prepare();
@@ -95,32 +106,57 @@ public class StatusItemAdapter extends BaseAdapter {
 						e.printStackTrace();
 					}
 					player.start();
-				}else{
+				} else {
 					view.setBackground(palyDrawable);
 					player.stop();
 				}
-			} });
-		
+			}
+		});
+
 		return convertView;
 	}
-	
-	private List<HashMap<String, Object>> getData() {  
-        // 新建一个集合类，用于存放多条数据  
-        ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();  
-        HashMap<String, Object> map = null;  
-        for (int i = 1; i <= 10; i++) {  
-            map = new HashMap<String, Object>();  
-            map.put("title", "人物" + i);  
-            map.put("time", "9月20日");
-            map.put("info", "一分钟读书会");
-            map.put("img", R.drawable.ic_launcher);
-            list.add(map);
-        }  
-  
-        return list;  
-    }  
-    public void setData(){  
-    	mData = getData();
-    } 
 
+	private List<HashMap<String, Object>> getData(QueryParams params) {
+		// 新建一个集合类，用于存放多条数据
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
+		Map<String, String> paramsMap = new HashMap<String, String>();
+		paramsMap.put("since_id", params.getSinceId());
+		paramsMap.put("max_id", params.getMaxId());
+		try {
+			String JSON = HttpUtils.get(RestConst.GETURL, paramsMap);
+			JSONTokener jsonParser = new JSONTokener(JSON);
+			JSONObject sounds = (JSONObject) jsonParser.nextValue();
+			JSONArray jsonArray = sounds.getJSONArray("sounds");
+			HashMap<String, Object> map = null;
+			int len = jsonArray.length();
+			for (int i = 0; i < len; i++) {
+				map = new HashMap<String, Object>();
+				JSONObject sound = (JSONObject) jsonArray.opt(i);
+				map.put("title", sound.getString("readerName"));
+				map.put("time", sound.getString("pubtime"));
+				map.put("info", sound.getString("memo"));
+				map.put("img", R.drawable.ic_launcher);
+				map.put("url", RestConst.DOMAIN + sound.getString("soundUrl"));
+				list.add(map);
+				if (i == 0 && params.getSinceId() == null) {
+					params.setMaxId(String.valueOf(sound.getInt("soundId")));
+				}
+				if (i == len - 1 && params.getMaxId() == null) {
+					params.setSinceId(String.valueOf(sound.getInt("soundId")));
+				}
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+
+	public void setData(QueryParams params) {
+		mData = getData(params);
+	}
 }

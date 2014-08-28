@@ -1,13 +1,16 @@
 package com.shenshan.readingparty.utils;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class HttpUtils {
 	/**
@@ -102,5 +105,37 @@ public class HttpUtils {
 			}
 		}
 		return in == null ? null : in.toString();
+	}
+
+	public static String get(String actionUrl, Map<String, String> params)
+			throws IOException {
+		if (params != null && !params.isEmpty()) {
+			StringBuilder paramStr = new StringBuilder();
+			paramStr.append("?");
+			for (Entry<String, String> entry : params.entrySet()) {
+				if (entry.getValue() != null
+						&& !entry.getValue().trim().isEmpty()) {
+					paramStr.append(entry.getKey()).append("=")
+							.append(entry.getValue()).append("&");
+				}
+			}
+			paramStr.deleteCharAt(paramStr.length() - 1);
+			actionUrl = actionUrl + paramStr.toString();
+		}
+		URL url = new URL(actionUrl);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("GET");
+		conn.setRequestProperty("Content-Type", "text/html; charset=UTF-8");
+
+		conn.connect();
+		BufferedReader br = new BufferedReader(new InputStreamReader(
+				conn.getInputStream()));
+		String line;
+		StringBuilder result = new StringBuilder();
+		while ((line = br.readLine()) != null) {
+			result.append(line).append("\n");
+		}
+		br.close();
+		return result.toString();
 	}
 }
