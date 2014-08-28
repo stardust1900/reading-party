@@ -15,6 +15,6 @@ class Sound(models.Model):
 
 def delete_file(sender, **kwargs): 
 	patch = kwargs['instance'] 
-	os.remove(patch.soundfile.path) 
+	os.remove(patch.soundfile.path)
 
 post_delete.connect(delete_file, sender=Sound)

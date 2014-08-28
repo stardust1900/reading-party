@@ -17,7 +17,7 @@ from django.conf import settings
 # Create your views here.
 def list(request):
 	limit = 10  # 每页显示的记录数
-	sounds = Sound.objects.all()
+	sounds = Sound.objects.all().order_by('-pubTime')
 	paginator = Paginator(sounds, limit)  # 实例化一个分页对象
 
 	page = request.GET.get('page')  # 获取页码
@@ -44,7 +44,8 @@ def upload(request):
 	    if form.is_valid():
 		    newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'],reader = request.user)
 		    newSound.save()
-		    mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT, __builtins__.list) else settings.MEDIA_ROOT
+		    #mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT, __builtins__.['list']) else settings.MEDIA_ROOT
+		    mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT, type([])) else settings.MEDIA_ROOT
 		    print(mediaRoot)
 		    print(newSound.soundfile)
 	    else:
