@@ -68,8 +68,8 @@ public class HttpUtils {
 				sb1.append(PREFIX);
 				sb1.append(BOUNDARY);
 				sb1.append(LINEND);
-				sb1.append("Content-Disposition: form-data; name=\"file"
-						+ (i++) + "\"; filename=\"" + file.getKey() + "\""
+				sb1.append("Content-Disposition: form-data; name=\""
+						+ file.getKey() + "\"; filename=\"" + file.getValue().getName() + "\""
 						+ LINEND);
 				sb1.append("Content-Type: application/octet-stream; charset="
 						+ CHARSET + LINEND);
@@ -103,6 +103,7 @@ public class HttpUtils {
 			while ((ch = in.read()) != -1) {
 				sb2.append((char) ch);
 			}
+			return sb2.toString();
 		}
 		return in == null ? null : in.toString();
 	}

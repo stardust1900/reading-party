@@ -6,7 +6,12 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import com.shenshan.readingparty.utils.HttpUtils;
+import com.shenshan.readingparty.utils.RestConst;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -28,6 +33,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckedTextView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -232,9 +238,32 @@ public class PostActivity extends Activity implements OnClickListener {
 				break;
 
 			case R.id.btnUpload:
-				System.out.println("upload :" + audioFile);
-				if (audioFile != null) {
-					System.out.println("111");
+				//System.out.println("upload :" + audioFile);
+				if (checkedItems.size() != 1) {
+					msg = "请选择一个录音，一个";
+				}else{
+					
+					EditText editText = (EditText)findViewById(R.id.editText1);
+					String memo = editText.getText().toString();
+					if("".equals(memo.trim())) {
+						msg="请输入memo";
+					}else{
+						final Map<String,String> params = new HashMap<String,String>();
+						params.put("memo", memo);
+						params.put("bookUrl", "");
+						final Map<String,File> files = new HashMap<String,File>();
+						files.put("soundfile", new File(soundPath + File.separator + checkedItems.valueAt(0)));
+						
+						new Thread() {
+							public void run(){
+								try {
+									HttpUtils.post(RestConst.POSTURL, params, files);
+								} catch (IOException e) {
+									Log.e(TAG, "upload failed", e);
+								}
+							}
+						}.start();
+					}
 				}
 				break;
 			}
