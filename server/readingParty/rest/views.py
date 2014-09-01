@@ -1,7 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from sound.models import Sound
+from sound.forms import SoundForm
+from django.contrib.auth.models import User
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
 import json
 import pytz 
 # Create your views here.
@@ -33,3 +36,21 @@ def query(request):
 	encodedjson = json.dumps(sounds,default=soundsToJson)
 
 	return HttpResponse(encodedjson)
+
+@csrf_exempt
+def upload(request):
+	print('wwwwwwwwwwwwwwwww')
+	if request.method == 'POST':
+		print(request.FILES)
+		form = SoundForm(request.POST, request.FILES)
+		print(request.POST['bookUrl'])
+		user = User.objects.all()[0]
+		print(user)
+		if form.is_valid():
+			newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'],reader = user)
+			newSound.save()
+			mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT, type([])) else settings.MEDIA_ROOT
+			print(mediaRoot)
+			print(newSound.soundfile)
+			return HttpResponse("success")
+	return HttpResponse("failed")
