@@ -26,10 +26,10 @@ def soundsToJson(sounds):
 def query(request):
 	since_id = request.GET.get('since_id')
 	max_id = request.GET.get('max_id')
-	if since_id != None:
-		sounds = Sound.objects.filter(id__gt=since_id).order_by('-pubTime')
-	elif max_id != None:
-		sounds = Sound.objects.filter(id__lt=max_id).order_by('-pubTime')[:10]
+	if max_id != None:
+		sounds = Sound.objects.filter(id__gt=max_id).order_by('-pubTime')
+	elif since_id != None:
+		sounds = Sound.objects.filter(id__lt=since_id).order_by('-pubTime')[:10]
 	else:
 		sounds = Sound.objects.all().order_by('-pubTime')[:10]
 
