@@ -11,7 +11,7 @@
 	<body>
         <div class="container">
 		<!-- Upload form. Note enctype attribute! -->
-		<form  class="form-horizontal" action="{% url "upload" %}" method="post" enctype="multipart/form-data">
+		<form  class="form-horizontal" action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 		<div class="form-group">
           <label  class="col-sm-2 control-label">声音文件</label>

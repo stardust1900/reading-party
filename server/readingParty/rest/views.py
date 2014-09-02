@@ -5,6 +5,8 @@ from sound.forms import SoundForm
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+import os,sys,subprocess
 import json
 import pytz 
 # Create your views here.
@@ -39,18 +41,37 @@ def query(request):
 
 @csrf_exempt
 def upload(request):
-	print('wwwwwwwwwwwwwwwww')
 	if request.method == 'POST':
-		print(request.FILES)
+		# print(request.FILES)
 		form = SoundForm(request.POST, request.FILES)
-		print(request.POST['bookUrl'])
+		# print(request.POST['bookUrl'])
 		user = User.objects.all()[0]
-		print(user)
+		# print(user)
 		if form.is_valid():
-			newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'],reader = user)
-			newSound.save()
-			mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT, type([])) else settings.MEDIA_ROOT
-			print(mediaRoot)
-			print(newSound.soundfile)
-			return HttpResponse("success")
+			fileName = request.FILES['soundfile'].name
+			if(fileName.endswith('amr')):
+				newSound = Sound(soundfile = request.FILES['soundfile'],memo = request.POST['memo'],bookUrl = request.POST['bookUrl'],reader = user)
+				newSound.save()
+				mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT, type([])) else settings.MEDIA_ROOT
+		    	amrfileName = newSound.soundfile.name
+		    	# print(amrfileName)
+		    	# soundsDir = strftime("/sounds/%Y/%m/%d/", gmtime())
+		    	filePath = mediaRoot +'/'+ amrfileName
+		    	# print(filePath)
+		    	amr2mp3(filePath)
+		    	newSound.soundfile.name=amrfileName[0:amrfileName.index(".amr")]+'.mp3'
+		    	newSound.save()
+				return HttpResponse("success")
 	return HttpResponse("failed")
+
+def amr2mp3(f):
+	if f.endswith(".amr"):
+		# print(f.index(".amr"))
+		name = f[0:f.index(".amr")]
+		print(name)
+		params=[]
+		params.append('ffmpeg')
+		params.append('-i')
+		params.append(f)
+		params.append(name+'.mp3')
+		subprocess.call(params)
