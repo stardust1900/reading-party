@@ -3,6 +3,7 @@ package com.shenshan.readingparty;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ import android.widget.TextView;
 
 public class StatusItemAdapter extends BaseAdapter {
 
-	private List<HashMap<String, Object>> mData = new ArrayList<HashMap<String, Object>>();
+	private LinkedList<HashMap<String, Object>> mData = new LinkedList<HashMap<String, Object>>();
 
 	private LayoutInflater mInflater;// 动态布局映射
 
@@ -138,10 +139,10 @@ public class StatusItemAdapter extends BaseAdapter {
 				map.put("img", R.drawable.ic_launcher);
 				map.put("url", RestConst.DOMAIN + sound.getString("soundUrl"));
 				list.add(map);
-				if (i == 0 && params.getSinceId() == null) {
+				if (i == 0 && params.getSinceId().isEmpty()) {
 					params.setMaxId(String.valueOf(sound.getInt("soundId")));
 				}
-				if (i == len - 1 && params.getMaxId() == null) {
+				if (i == len - 1 && params.getMaxId().isEmpty()) {
 					params.setSinceId(String.valueOf(sound.getInt("soundId")));
 				}
 			}
@@ -157,6 +158,20 @@ public class StatusItemAdapter extends BaseAdapter {
 	}
 
 	public void setData(QueryParams params) {
-		mData = getData(params);
+		mData.addAll(getData(params));
+	}
+	
+	public void refresh(QueryParams params) {
+		List<HashMap<String, Object>> result = getData(params);
+		for(int i = result.size()-1;i>=0;i--){
+			mData.addFirst(result.get(i));
+		}
+	}
+
+	public void loadMore(QueryParams params) {
+		List<HashMap<String, Object>> result = getData(params);
+		for(int i = 0; i<result.size();i++){
+			mData.addLast(result.get(i));
+		}
 	}
 }
