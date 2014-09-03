@@ -6,11 +6,13 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from django.contrib import auth
 import os
 import sys
 import subprocess
 import json
 import pytz
+import hashlib
 # Create your views here.
 
 
@@ -90,3 +92,19 @@ def amr2mp3(f):
         params.append(f)
         params.append(name + '.mp3')
         subprocess.call(params)
+
+@csrf_exempt
+def doAuth(request):
+    print('111111111111')
+    if request.method == 'POST':
+        print(request.POST)
+        email = request.POST['email']
+        password = request.POST['password']
+        print(email)
+        print(password)
+        user = auth.authenticate(username=email, password=password)
+        if user is not None:
+            md5 = hashlib.md5(email).hexdigest()
+            return HttpResponse("success:"+md5)
+
+    return HttpResponse("failed")
