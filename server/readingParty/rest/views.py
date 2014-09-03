@@ -95,13 +95,9 @@ def amr2mp3(f):
 
 @csrf_exempt
 def doAuth(request):
-    print('111111111111')
     if request.method == 'POST':
-        print(request.POST)
         email = request.POST['email']
         password = request.POST['password']
-        print(email)
-        print(password)
         user = auth.authenticate(username=email, password=password)
         if user is not None:
             md5 = hashlib.md5(email).hexdigest()
