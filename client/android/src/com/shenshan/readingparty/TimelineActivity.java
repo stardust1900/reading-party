@@ -1,34 +1,22 @@
 package com.shenshan.readingparty;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-
 import com.costum.android.widget.PullAndLoadListView;
 import com.costum.android.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.costum.android.widget.PullToRefreshListView.OnRefreshListener;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
 public class TimelineActivity extends Activity {
 	private PullAndLoadListView mListView = null;
-	private LinkedList<String> mListItems;
 
-	private ArrayAdapter<String> adapter;
 	private StatusItemAdapter statusAdapter;
-	private String[] mNames = { "Fabian", "Carlos", "Alex", "Andrea", "Karla",
-			"Freddy", "Lazaro", "Hector", "Carolina", "Edwin", "Jhon",
-			"Edelmira", "Andres" };
-
-	private String[] mAnimals = { "Perro", "Gato", "Oveja", "Elefante", "Pez",
-			"Nicuro", "Bocachico", "Chucha", "Curie", "Raton", "Aguila",
-			"Leon", "Jirafa" };
 
 	private QueryParams param = new QueryParams();
 
@@ -50,9 +38,6 @@ public class TimelineActivity extends Activity {
 			}
 		});
 
-		mListItems = new LinkedList<String>();
-		mListItems.addAll(Arrays.asList(mNames));
-
 		// adapter = new ArrayAdapter<String>(this,
 		// android.R.layout.simple_list_item_1, mListItems);
 
@@ -67,9 +52,18 @@ public class TimelineActivity extends Activity {
 		btnRecord.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent intent = new Intent();
-				intent.setClass(TimelineActivity.this, PostActivity.class);
-				startActivity(intent);
+				SharedPreferences sp = getSharedPreferences("SP", MODE_PRIVATE);
+				String accessToken = sp.getString("access_token", "");
+				//long expireTime = sp.getLong("expire_time", System.currentTimeMillis());
+				if (accessToken.isEmpty()) {
+					Intent intent = new Intent();
+					intent.setClass(TimelineActivity.this, LoginActivity.class);
+					startActivity(intent);
+				} else {
+					Intent intent = new Intent();
+					intent.setClass(TimelineActivity.this, PostActivity.class);
+					startActivity(intent);
+				}
 			}
 
 		});
@@ -90,16 +84,11 @@ public class TimelineActivity extends Activity {
 			param.setMaxId("");
 			statusAdapter.loadMore(param);
 
-			for (int i = 0; i < mNames.length; i++)
-				mListItems.add(mNames[i]);
-
 			return null;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
-			mListItems.add("Added after load more");
-
 			// We need notify the adapter that the data have been changed
 			statusAdapter.notifyDataSetChanged();
 
@@ -135,8 +124,6 @@ public class TimelineActivity extends Activity {
 				statusAdapter.refresh(param);
 			}
 
-			for (int i = 0; i < mAnimals.length; i++)
-				mListItems.addFirst(mAnimals[i]);
 			return null;
 		}
 

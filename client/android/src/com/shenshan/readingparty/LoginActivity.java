@@ -1,9 +1,18 @@
 package com.shenshan.readingparty;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.shenshan.readingparty.utils.HttpUtils;
+import com.shenshan.readingparty.utils.RestConst;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -207,16 +216,31 @@ public class LoginActivity extends Activity {
 				return false;
 			}
 
-			for (String credential : DUMMY_CREDENTIALS) {
-				String[] pieces = credential.split(":");
-				if (pieces[0].equals(mEmail)) {
-					// Account exists, return true if the password matches.
-					return pieces[1].equals(mPassword);
+			/*
+			 * for (String credential : DUMMY_CREDENTIALS) { String[] pieces =
+			 * credential.split(":"); if (pieces[0].equals(mEmail)) { // Account
+			 * exists, return true if the password matches. return
+			 * pieces[1].equals(mPassword); } }
+			 */
+			final Map<String, String> paramsMap = new HashMap<String, String>();
+			paramsMap.put("email", mEmail);
+			paramsMap.put("password", mPassword);
+			try {
+				String result = HttpUtils.post(RestConst.AUTHURL, paramsMap,
+						null);
+				if (result != null && result.startsWith("success:")) {
+					SharedPreferences sp = getSharedPreferences("SP",
+							MODE_PRIVATE);
+					Editor editor = sp.edit();
+					editor.putString("access_token", result.split(":")[1]);
+					editor.commit();
+					return true;
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-
 			// TODO: register the new account here.
-			return true;
+			return false;
 		}
 
 		@Override
