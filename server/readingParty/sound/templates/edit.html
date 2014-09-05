@@ -5,10 +5,20 @@
 		<title>一分钟读书会</title>
 		{% load staticfiles %}
 		<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+		<link href="{% static "css/signin.css" %}" rel="stylesheet">
 	</head>
 
 	<body>
-      <div class="container">
+     <div class="blog-masthead">
+          <div class="container">
+            <nav class="blog-nav">
+              <a class="blog-nav-item" href="{% url 'list' %}">读书会</a>
+               <a class="blog-nav-item" href="http://www.douban.com/group/topic/47693021/" target="_blank">About</a>
+            </nav>
+          </div>
+        </div>
+		<br>
+		<br>
 		<!-- Upload form. Note enctype attribute! -->
 		<form class="form-horizontal" action="{% url "edit" %}" method="post" role="form" class="form-horizontal">
 			{% csrf_token %}

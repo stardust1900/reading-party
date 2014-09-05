@@ -25,6 +25,16 @@
     <![endif]-->
   </head>
   <body>
+    <div class="blog-masthead">
+          <div class="container">
+            <nav class="blog-nav">
+              <a class="blog-nav-item" href="{% url 'list' %}">读书会</a>
+              <a class="blog-nav-item" href="http://www.douban.com/group/topic/47693021/" target="_blank">About</a>
+            </nav>
+          </div>
+        </div>
+        <br>
+        <br>
     {% if errors %}
       {% for error in errors %}
           <div class="alert alert-warning alert-dismissable">
