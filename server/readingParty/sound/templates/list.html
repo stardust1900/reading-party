@@ -41,6 +41,12 @@
 			  {# sounds.paginator.page_range 这个函数返回包含一个所有页码数的 range 对象 #}
 			  {# 即 range(1, sounds.paginator.num_pages + 1) #}
 			  <ul class="pagination">
+			  	{% ifequal sounds.number 1 %}
+				 <li><a href="?page=1">&laquo;</a></li>
+				{% else %}
+				 <li><a href="?page={{sounds.number | add:'-1'}}">&laquo;</a></li>
+				{% endifequal %}
+
 			  {% for page_number in sounds.paginator.page_range %}
 			    {% ifequal page_number  sounds.number %}
 			      <li class="active"><a href="#">{{ page_number }} <span class="sr-only">(current)</span></a></li>
@@ -48,6 +54,7 @@
 			      <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
 			    {% endifequal %}
 			  {% endfor %}
+			  <li><a href="?page={{sounds.number | add:'1'}}">&raquo;</a></li>
 			  </ul>
 			</p>
 			{% else %}
