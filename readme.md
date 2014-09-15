@@ -14,6 +14,10 @@ audio.js
 
 ffmpeg
 
+mysql
+===
+pip install mysql-connector-python
+
 
 客户端 android（目前只有android）
 ===

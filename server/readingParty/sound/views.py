@@ -52,6 +52,7 @@ def upload(request):
                 newSound = Sound(soundfile=request.FILES['soundfile'], memo=request.POST[
                                  'memo'], bookUrl=request.POST['bookUrl'], reader=request.user)
                 newSound.save()
+
                 if(fileName.endswith('amr')):
                     # mediaRoot = settings.MEDIA_ROOT[0] if isinstance(settings.MEDIA_ROOT,
                     # __builtins__.['list']) else settings.MEDIA_ROOT
@@ -63,8 +64,9 @@ def upload(request):
                     amr2mp3(filePath)
                     newSound.soundfile.name = amrfileName[0:amrfileName.index(".amr")] + '.mp3'
                     newSound.save()
-                else:
-                    return render_to_response('upload.html', {'form': form}, context_instance=RequestContext(request))
+            else:
+                form.field_error = '请上传mp3或amr格式的文件！'
+                return render_to_response('upload.html', {'form': form}, context_instance=RequestContext(request))
 
     return HttpResponseRedirect(reverse('sound.views.list'))
 

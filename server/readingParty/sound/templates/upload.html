@@ -20,6 +20,9 @@
     <br>
     <br>
 		<!-- Upload form. Note enctype attribute! -->
+    {% if form.field_error %}
+    <div class="alert alert-danger" role="alert">{{form.field_error}}</div>
+    {% endif %}
 		<form  class="form-horizontal" action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 		<div class="form-group">
