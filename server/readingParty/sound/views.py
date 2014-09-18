@@ -97,9 +97,10 @@ def edit(request):
     # s = Sound.objects.get(id=)
     if request.method == 'POST':
         soundId = request.POST['soundId']
-        print(request.POST['soundId'])
+        # print(request.POST['soundId'])
         s = Sound.objects.get(id=soundId)
         s.memo = request.POST['memo']
+        print(s.memo)
         s.bookUrl = request.POST['bookUrl']
         s.save()
     else:

@@ -1,2 +1,5 @@
-CREATE SCHEMA `readingparty` DEFAULT CHARACTER SET utf8 ;
-Grant all privileges on readingparty.* to 'readingparty'@'%' identified by 'readingparty' with grant option;
+DROP DATABASE IF EXISTS `readingparty`;
+CREATE DATABASE `readingparty` DEFAULT CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;
+USE 'readingparty';
+GRANT ALL PRIVILEGES ON readingparty.* TO 'readingparty'@'localhost' IDENTIFIED BY 'readingparty' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
