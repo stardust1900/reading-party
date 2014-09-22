@@ -26,27 +26,29 @@
 		<form  class="form-horizontal" action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
 		<div class="form-group">
-          <label  class="col-sm-2 control-label">声音文件</label>
-          <div class="col-sm-10">
-            <input id="id_soundfile" name="soundfile" type="file" accept=".mp3,.amr" required/>
+          <label  class="col-sm-2 control-label">声音文件 <font color="red">*</font></label>
+          <div class="col-sm-8">
+            <input id="id_soundfile" name="soundfile" type="file" accept=".mp3,.amr" class="form-control" required/>
           </div>
         </div>
 
         <div class="form-group">
-          <label  class="col-sm-2 control-label">备注</label>
-          <div class="col-sm-10">
-             <input id="id_memo" maxlength="140" name="memo" type="text" required autofocus/>
+          <label  class="col-sm-2 control-label">备注<font color="red">*</font></label>
+          <div class="col-sm-8">
+             <!-- <input id="id_memo" maxlength="140" name="memo" type="text" required autofocus/> -->
+             <textarea  id="id_memo" name="memo" class="form-control" rows="3" required autofocus></textarea>
           </div>
         </div>
         <div class="form-group">
           <label  class="col-sm-2 control-label">豆瓣url</label>
-          <div class="col-sm-10">
-            <input id="id_bookUrl" name="bookUrl" type="url" />
+          <div class="col-sm-8">
+            <input id="id_bookUrl" name="bookUrl" type="url" class="form-control"/>
           </div>
         </div>
          <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">上传</button>
+          <div class="col-sm-offset-2 col-sm-8">
+            <button type="submit" class="btn btn-primary">上 传</button>
+            <a href="{% url 'list' %}" class="btn btn-primary" role="button">返 回</a>
           </div>
         </div>
 		</form>

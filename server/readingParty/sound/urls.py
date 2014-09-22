@@ -8,4 +8,7 @@ urlpatterns = patterns('sound.views',
     url(r'^edit/$', 'edit', name='edit'),
     url(r'^remove/(\d+)/$', 'remove', name='remove'),
     url(r'^toEdit/(\d+)/$', 'toEdit', name='toEdit'),
+    url(r'^play/(\d+)/$', 'play', name='play'),
+    url(r'^addComment/$', 'addComment', name='addComment'),
+     url(r'^removeComment/(\d+)/$', 'removeComment', name='removeComment'),
 )

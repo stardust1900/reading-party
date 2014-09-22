@@ -21,3 +21,9 @@ def delete_file(sender, **kwargs):
 		print(e)
 	
 post_delete.connect(delete_file, sender=Sound)
+
+class Comment(models.Model):
+	sound = models.ForeignKey(Sound)
+	content = models.TextField()
+	commenter = models.ForeignKey(User)
+	pubTime = models.DateTimeField(auto_now=True, auto_now_add=True)

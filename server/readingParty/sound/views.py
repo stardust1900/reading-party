@@ -3,7 +3,9 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from django.template import RequestContext
 from sound.forms import SoundForm
+from sound.forms import CommentForm
 from sound.models import Sound
+from sound.models import Comment
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -116,3 +118,28 @@ def remove(request, soundId):
     if s.reader == request.user:
         s.delete()
         return HttpResponseRedirect(reverse('sound.views.list'))
+
+
+def play(request, soundId):
+    s = Sound.objects.get(id=soundId)
+    comments = s.comment_set.all()
+    form = CommentForm()
+    return render_to_response('play.html', {'form': form,'sound':s,'comments':comments}, context_instance=RequestContext(request))
+
+def addComment(request):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            content = request.POST['content']
+            soundId = request.POST['soundId']
+            sound = Sound.objects.get(id=soundId)
+            comment = Comment(sound=sound,content=content,commenter=request.user)
+            comment.save()
+    return HttpResponseRedirect(reverse('sound.views.play',args=(1,)))
+
+@login_required
+def removeComment(request, commentId):
+    c = Comment.objects.get(id=commentId)
+    if c.commenter == request.user:
+        c.delete()
+    return HttpResponseRedirect(reverse('sound.views.play',args=(c.sound.id,)))
