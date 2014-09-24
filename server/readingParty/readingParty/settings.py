@@ -66,10 +66,10 @@ DATABASES = {
         # 'ENGINE': 'mysql.connector.django',
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'readingparty',
-        'USER':'readingparty',
-        'PASSWORD':'readingparty',
-        'HOST':'127.0.0.1',
-        'PORT':'3306',
+        'USER': 'readingparty',
+        'PASSWORD': 'readingparty',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -96,13 +96,51 @@ MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media')
 MEDIA_URL = '/media/'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR,'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
-STATICFILES_DIRS = ( 
-    ("js", os.path.join(STATIC_ROOT,'js')),
-    ("css", os.path.join(STATIC_ROOT,'css')),
-    ("img", os.path.join(STATIC_ROOT,'img')),
-    ("fonts", os.path.join(STATIC_ROOT,'fonts')),
+STATICFILES_DIRS = (
+    ("js", os.path.join(STATIC_ROOT, 'js')),
+    ("css", os.path.join(STATIC_ROOT, 'css')),
+    ("img", os.path.join(STATIC_ROOT, 'img')),
+    ("fonts", os.path.join(STATIC_ROOT, 'fonts')),
 )
 
 AUTHENTICATION_BACKENDS = ('reader.backends.EmailCheckModelBackend',)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s [%(levelname)s] [%(module)s %(process)d %(thread)d] [%(filename)s %(funcName)s Line:%(lineno)d]: %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs/debug.log'),
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        # 'django.db.backends': {
+        #     'handlers': ['file'],
+        #     'level': 'DEBUG',
+        #     'propagate': True,
+        # },
+        'readingparty': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}

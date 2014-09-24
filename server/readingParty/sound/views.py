@@ -21,10 +21,18 @@ import os
 import sys
 import subprocess
 from time import gmtime, strftime
-# Create your views here.
+import logging
 
+# Get an instance of a logger
+logger = logging.getLogger("readingparty")
 
 def list(request):
+    # print(logger)
+    # logger.error("error,error")
+    # logger.info("info,info")
+    # logger.debug("debug,debug")
+    # logger.warn("warn,warn")
+
     limit = 10  # 每页显示的记录数
     sounds = Sound.objects.all().order_by('-pubTime')
     paginator = Paginator(sounds, limit)  # 实例化一个分页对象
@@ -135,7 +143,7 @@ def addComment(request):
             sound = Sound.objects.get(id=soundId)
             comment = Comment(sound=sound,content=content,commenter=request.user)
             comment.save()
-    return HttpResponseRedirect(reverse('sound.views.play',args=(1,)))
+    return HttpResponseRedirect(reverse('sound.views.play',args=(soundId,)))
 
 @login_required
 def removeComment(request, commentId):
