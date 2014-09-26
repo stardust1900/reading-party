@@ -20,11 +20,14 @@ PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 SECRET_KEY = 'c9!b9=*=caff#%osqxqa%(*^2z@wmwbkjn+p5s$zws2987*b!#'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
+# Add your host here like ['www.beta800.net'] or ['*'] for a quick test, but don't use ['*'] for production.
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
