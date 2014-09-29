@@ -31,8 +31,10 @@
 	                <td>{{sound.reader.username}}</td>
 	                <td>{{sound.pubTime|date:"Y-m-d H:i:s"}}</td>
 	                <td>
+	                	{% ifequal sound.reader request.user %}
 	                	<a href="/sound/toEdit/{{sound.id}}"><span class="glyphicon glyphicon-edit"></span> </a>&nbsp;&nbsp;&nbsp;
 	                	<a href="/sound/remove/{{sound.id}}"><span class="glyphicon glyphicon-remove"></span></a>
+	                	{% endifequal %}
 	                </td>
 				</tr>
 	            {% endfor %}

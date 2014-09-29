@@ -110,6 +110,8 @@ STATICFILES_DIRS = (
 
 AUTHENTICATION_BACKENDS = ('reader.backends.EmailCheckModelBackend',)
 
+TEMPLATE_CONTEXT_PROCESSORS = ("django.core.context_processors.request",)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

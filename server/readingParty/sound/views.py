@@ -44,7 +44,7 @@ def list(request):
         sounds = paginator.page(1)  # 取第一页的记录
     except EmptyPage:  # 如果页码太大，没有相应的记录
         sounds = paginator.page(paginator.num_pages)  # 取最后一页的记录
-    return render_to_response('list.html', {'sounds': sounds})
+    return render_to_response('list.html', {'sounds': sounds},context_instance=RequestContext(request))
 
 @login_required
 def toUpload(request):
@@ -93,7 +93,7 @@ def amr2mp3(f):
         params.append(name + '.mp3')
         subprocess.call(params)
 
-
+@login_required
 def toEdit(request, soundId):
     s = Sound.objects.get(id=soundId)
     data = {'': None, 'memo': s.memo, 'bookUrl': s.bookUrl}
@@ -102,17 +102,17 @@ def toEdit(request, soundId):
 
     return render_to_response('edit.html', {'form': form}, context_instance=RequestContext(request))
 
-
+@login_required
 def edit(request):
     # s = Sound.objects.get(id=)
     if request.method == 'POST':
         soundId = request.POST['soundId']
         # print(request.POST['soundId'])
         s = Sound.objects.get(id=soundId)
-        s.memo = request.POST['memo']
-        print(s.memo)
-        s.bookUrl = request.POST['bookUrl']
-        s.save()
+        if s.reader == request.user:
+            s.memo = request.POST['memo']
+            s.bookUrl = request.POST['bookUrl']
+            s.save()
     else:
         print("get")
     # sounds = Sound.objects.all()
@@ -134,6 +134,7 @@ def play(request, soundId):
     form = CommentForm()
     return render_to_response('play.html', {'form': form,'sound':s,'comments':comments}, context_instance=RequestContext(request))
 
+@login_required
 def addComment(request):
     if request.method == 'POST':
         form = CommentForm(request.POST)
