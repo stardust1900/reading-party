@@ -32,7 +32,6 @@ def list(request):
     # logger.info("info,info")
     # logger.debug("debug,debug")
     # logger.warn("warn,warn")
-
     limit = 10  # 每页显示的记录数
     sounds = Sound.objects.all().order_by('-pubTime')
     paginator = Paginator(sounds, limit)  # 实例化一个分页对象

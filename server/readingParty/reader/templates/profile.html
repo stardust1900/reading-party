@@ -11,9 +11,28 @@
 
 	<body>
 		{% include 'nav.html' %}
+		<br>
 		<div class="container">
-			<br>
-			<br>
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">资料信息</h3>
+			  </div>
+			  <div class="panel-body">
+				 <div class="form-group">
+				    <label >用户名：</label>
+				    <span>{{request.user}}</span>
+				  </div>
+				  <div class="form-group">
+				    <label >email：</label>
+				    <span>{{request.user.email}}</span>
+				  </div>
+			  </div>
+			</div>
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">已发布音频</h3>
+			  </div>
+			  <div class="panel-body">
 	        {% if sounds %}
 			<table class="table">
 				{% for sound in sounds %}
@@ -21,7 +40,6 @@
 	                <td>{{forloop.counter}}</td>
 	                <td><a href="/sound/play/{{sound.id}}" title="{{sound.memo}}">{{sound.memo| slice:"10"}}</a></td>
 	                <td><audio src="{{ sound.soundfile.url }}" preload="auto" /></td>
-	                <td>{{sound.reader.username}}</td>
 	                <td>{{sound.pubTime|date:"Y-m-d H:i:s"}}</td>
 	                <td>
 	                	{% ifequal sound.reader request.user %}
@@ -55,7 +73,8 @@
 			{% else %}
 				<p>No documents.</p>
 			{% endif %}
-			<a href="/sound/toUpload" class="btn btn-primary" role="button">添 加</a>
+			</div>
+			</div>
 	    </div>
 
 	    <script src="{% static "js/audio.min.js" %}"></script>

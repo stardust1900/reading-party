@@ -1,13 +1,20 @@
-#coding=utf-8  
+# coding=utf-8
 from django.shortcuts import render_to_response
 from django.shortcuts import render
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from reader.forms import LoginForm,RegisterForm
+from reader.forms import LoginForm, RegisterForm
 from django.contrib import auth
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
+from sound.models import Sound
 # Create your views here.
+
+
 def login(request):
 	if request.method == 'GET':
 		loginForm = LoginForm()
@@ -15,11 +22,13 @@ def login(request):
 			loginForm.next = request.GET['next']
 		else:
 			loginForm.next = "/"
-		return render_to_response('login.html',{'form': loginForm},context_instance=RequestContext(request))
+		return render_to_response('login.html', {'form': loginForm}, context_instance=RequestContext(request))
 	else:
 		email = request.POST['email']
 		password = request.POST['password']
 		next = request.POST['next']
+		if next.strip()=='':
+			next = "/"
 		user = auth.authenticate(username=email, password=password)
 
 		if user is not None and user.is_active:
@@ -31,7 +40,28 @@ def login(request):
 				loginForm.next = request.GET['next']
 			else:
 				loginForm.next = "/"
-			return render_to_response('login.html',{'form': loginForm,'password_is_wrong':True},context_instance=RequestContext(request))
+			return render_to_response('login.html', {'form': loginForm, 'password_is_wrong': True}, context_instance=RequestContext(request))
+
+
+def logout(request):
+	auth.logout(request)
+	return HttpResponseRedirect("/")
+
+
+@login_required
+def showProfile(request):
+	limit = 10
+	sounds = Sound.objects.filter(reader=request.user).order_by('-pubTime')
+	paginator = Paginator(sounds, limit)
+	page = request.GET.get('page')
+	try:
+		sounds = paginator.page(page)
+	except PageNotAnInteger:
+		sounds = paginator.page(1)
+	except EmptyPage:
+		sounds = paginator.page(paginator.num_pages)
+	return render_to_response('profile.html',{'sounds': sounds},context_instance=RequestContext(request))
+
 
 def register(request):
 	if request.method == 'GET':

@@ -1,0 +1,16 @@
+<div class="blog-masthead">
+  <div class="container">
+    <nav class="blog-nav">
+      <a class="blog-nav-item active" href="/">读书会</a>
+      <a class="blog-nav-item" href="http://www.douban.com/group/topic/47693021/" target="_blank">About</a>
+      {% if request.user.is_authenticated %}
+      <div class="navbar-right blog-nav-item">
+      	<a class="blog-nav-item" href="{% url 'profile' %}" >Profile</a>
+      	<a class="btn btn-sm btn-default" href="/reader/logout">注销</a>
+      </div>
+      {% else %}
+      <div class="navbar-right blog-nav-item"><a class="btn btn-sm btn-default " href="/reader/login">登录</a></div>
+      {% endif %}
+    </nav>
+  </div>
+</div>
