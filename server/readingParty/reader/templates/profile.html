@@ -75,6 +75,21 @@
 			{% endif %}
 			</div>
 			</div>
+			{% if codes%}
+			<div class="panel panel-default">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">邀请码</h3>
+			  </div>
+			  <div class="panel-body">
+				<ul class="list-group">
+					{% for code in codes %}
+				  <li class="list-group-item">{{code.code}}</li>
+				   {% endfor %}
+				</ul>
+			  </div>
+			</div>
+			{% endif %}
+
 	    </div>
 
 	    <script src="{% static "js/audio.min.js" %}"></script>

@@ -38,6 +38,7 @@
     {% endif %}
     <div class="container">
       <form class="form-horizontal" role="form" action="{% url "register" %}" method="post">
+        <input type="hidden" name="ivc" value="{{ivc}}" />
         {% csrf_token %}
         <div class="form-group">
           <label  class="col-sm-2 control-label">电邮</label>
