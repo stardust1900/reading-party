@@ -29,7 +29,13 @@
 			     <li class="list-group-item">
 			     	<h4>{{comment.commenter.username}}:</h4>
 			     	<p class="text-justify">{{comment.content}}</p>
+			     	{% ifequal comment.commenter request.user %}
 			     	<p class="text-right"><a href="/sound/removeComment/{{comment.id}}"><span class="glyphicon glyphicon-trash"></span></a></p>
+			     	{% else %}
+				     	{% ifequal sound.reader request.user %}
+				     	<p class="text-right"><a href="/sound/removeComment/{{comment.id}}"><span class="glyphicon glyphicon-trash"></span></a></p>
+				     	{% endifequal %}
+			     	{% endifequal %}
 			     </li>
 			     {% endfor %}
 			 </ul>
@@ -37,7 +43,7 @@
 				<p>No comments.</p>
 			{% endif %}
 		</div>
-
+		{% if request.user.is_authenticated %}
 		<div>
 		<form  class="form-horizontal" action="{% url 'addComment' %}" method="post">
 		{% csrf_token %}
@@ -54,7 +60,14 @@
         </div>
 		</form>
 		</div>
-
+		{% else %}
+		<div>
+			<p class="bg-success">登录后才能评论 :) 
+				<br>
+				<br>
+			向<a href="http://weibo.com/halfg0d">@王半山人</a>索要注册邀请码</p>
+		</div>
+		{% endif %}
 		</div>
 		<script src="{% static "js/audio.min.js" %}"></script>
 		<script>
