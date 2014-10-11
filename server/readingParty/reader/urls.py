@@ -7,5 +7,6 @@ urlpatterns = patterns('reader.views',
     url(r'^profile/$', 'showProfile', name='profile'),
     url(r'^showInviteCode/$', 'showInviteCode', name='showInviteCode'),
     url(r'^genIvc/(\d+)/$', 'genIvc', name='genIvc'),
+     url(r'^changePwd/$', 'changePwd', name='changePwd'),
     # url(r'^signin/$', 'signin', name='signin'),
 )

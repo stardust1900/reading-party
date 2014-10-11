@@ -6,6 +6,9 @@
 		{% load staticfiles %}
 		<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
 		<link href="{% static "css/signin.css" %}" rel="stylesheet">
+		<script src="{% static "js/jquery-2.1.1.min.js" %}"></script>
+		<script src="{% static "js/bootstrap.min.js" %}"></script>
+		
 		
 	</head>
 
@@ -13,12 +16,22 @@
 		{% include 'nav.html' %}
 		<br>
 		<div class="container">
+
 			<div class="panel panel-default">
 			  <div class="panel-heading">
 			    <h3 class="panel-title">资料信息</h3>
 			  </div>
 			  <div class="panel-body">
-				 <div class="form-group">
+			  	<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+				  <li class="active"><a href="#home" role="tab" data-toggle="tab">用户信息</a></li>
+				  <li><a href="#changepwd" role="tab" data-toggle="tab">修改密码</a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+				  <div class="tab-pane active" id="home">
+				  	<div class="form-group">
 				    <label >用户名：</label>
 				    <span>{{request.user}}</span>
 				  </div>
@@ -26,8 +39,43 @@
 				    <label >email：</label>
 				    <span>{{request.user.email}}</span>
 				  </div>
+
+				  </div>
+				  <div class="tab-pane" id="changepwd">
+				  	<div id="alert" class="alert alert-info" role="alert"></div>
+				  	<iframe id="id_iframe" name="id_iframe" style="display:none;"></iframe> 
+				  	<form id="form1" class="form-horizontal" role="form" method="POST" target="id_iframe">
+				  		{% csrf_token %}
+				  	<div class="form-group">
+				    <label class="col-sm-2 control-label">原密码：</label>
+				    <div class="col-sm-8">
+				    <input name="oldpassword" type="password" class="form-control" placeholder="Password" required>
+				    </div>
+				    </div>
+				    <div class="form-group">
+				    <label class="col-sm-2 control-label">新密码：</label>
+				    <div class="col-sm-8">
+				    <input name="password1" type="password" class="form-control" placeholder="Password" required>
+				    </div>
+				    </div>
+				    <div class="form-group">
+				    <label class="col-sm-2 control-label">再输一次新密码：</label>
+				    <div class="col-sm-8">
+				    <input name="password2" type="password" class="form-control" placeholder="Password" required>
+				    </div>
+				    </div>
+				    <div class="col-sm-2 col-sm-offset-9">
+				    <button class="btn btn-sm btn-default" type="submit">确定</button>
+				    </div>
+				    </form>
+				  </div>
+				</div>
+
+				  
 			  </div>
 			</div>
+
+
 			<div class="panel panel-default">
 			  <div class="panel-heading">
 			    <h3 class="panel-title">已发布音频</h3>
@@ -97,6 +145,32 @@
 		    audiojs.events.ready(function() {
 		    var as = audiojs.createAll();
 		  });
+
+	$(document).ready(function(){
+		$(".alert").hide();
+	});
+	 $("#form1").submit(function (){
+	 	var ajax_data = $(this).serialize();
+	 	$.ajax({ 
+	     type:"POST", //表单提交类型 
+	     url:'{% url "changePwd" %}', //表单提交目标 
+	     data:ajax_data, //表单数据
+	     success:function(msg){
+	     	if('success'==msg) {
+		     	$("#alert").html("修改成功 :)").removeClass().addClass("alert alert-info").show().hide(3000);
+		     }else if('different'==msg){
+		     	$("#alert").html("两次密码输入不一致").removeClass().addClass("alert alert-danger").show().hide(3000);
+		     }else if('error'==msg){
+				$("#alert").html("原密码输入错误").removeClass().addClass("alert alert-danger").show().hide(3000);
+		     }
+
+	     },
+	     error:function(){
+	     	$(".alert").html("修改失败 :(").show().hide(3000);
+	     }
+	    }); 
+
+	 });
 		</script>
 	</body>
 

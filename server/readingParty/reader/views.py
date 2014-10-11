@@ -145,3 +145,21 @@ def genIvc(request,ownerId):
 		ivc.save()
 	
 	return HttpResponseRedirect(reverse('reader.views.showInviteCode'))
+
+@login_required
+def changePwd(request):
+	if request.method == 'POST':
+		oldpassword = request.POST.get('oldpassword','');
+		password1 = request.POST.get('password1','');
+		password2 = request.POST.get('password2','');
+
+		user = auth.authenticate(username=request.user.email, password=oldpassword)
+		if user is not None and user.is_active:
+			if password1==password2:
+				user.set_password(password1)
+				user.save()
+				return HttpResponse("success")
+			else:
+				return HttpResponse("different")
+		else:
+			return HttpResponse("error")

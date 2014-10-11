@@ -46,7 +46,7 @@
           注册成功请登录
         </div>
       {% endif %}
-      <form class="form-signin" role="form" action="{% url "login" %}" method="post">
+      <form class="form-signin" role="form" action="{% url "login" %}" method="POST">
         {% csrf_token %}
         <h3 class="form-signin-heading">请登录</h3>
         <input name="email" type="email" class="form-control" placeholder="Email address" required autofocus>
