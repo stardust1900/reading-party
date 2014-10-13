@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>一分钟读书会</title>	
+		{% load staticfiles %}
+		<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+		<link href="{% static "css/signin.css" %}" rel="stylesheet">
+	</head>
+
+	<body>
+		{% include 'nav.html' %}
+		<div class="container">
+			<br>
+			<br>
+
+			{% if sounds %}
+			<ul class="list-group">
+				{% for sound in sounds %}
+			  <li class="media">
+			    <div class="list-group-item">
+			    	<a href="/sound/play/{{sound.id}}"><h4 class="media-heading">{{sound.reader.username}}:&nbsp;{{sound.pubTime|date:"Y-m-d H:i:s"}}</h4></a>
+			    	<p>{{sound.memo}}</p>
+			    	<p>{{sound.bookUrl}}</p>
+					<p><audio src="{{ sound.soundfile.url }}" preload="auto" /></p>
+
+					{% ifequal sound.reader request.user %}
+	                <p class="text-right">	
+	                	<a href="/sound/toEdit/{{sound.id}}"><span class="glyphicon glyphicon-edit"></span> </a>&nbsp;&nbsp;&nbsp;
+	                	<a href="/sound/remove/{{sound.id}}"><span class="glyphicon glyphicon-remove"></span></a>
+	                </p>
+	                {% endifequal %}
+			    </div>
+			  </li>
+			    {% endfor %}
+			</ul>
+
+			<p>
+			  {# sounds.paginator.page_range 这个函数返回包含一个所有页码数的 range 对象 #}
+			  {# 即 range(1, sounds.paginator.num_pages + 1) #}
+			  <ul class="pagination">
+			  	{% ifequal sounds.number 1 %}
+				 <li><a href="?page=1">&laquo;</a></li>
+				{% else %}
+				 <li><a href="?page={{sounds.number | add:'-1'}}">&laquo;</a></li>
+				{% endifequal %}
+
+			  {% for page_number in sounds.paginator.page_range %}
+			    {% ifequal page_number  sounds.number %}
+			      <li class="active"><a href="#">{{ page_number }} <span class="sr-only">(current)</span></a></li>
+			    {% else %}
+			      <li><a href="?page={{ page_number }}">{{ page_number }}</a></li>
+			    {% endifequal %}
+			  {% endfor %}
+			  <li><a href="?page={{sounds.number | add:'1'}}">&raquo;</a></li>
+			  </ul>
+			</p>
+			{% else %}
+				<p>No documents.</p>
+			{% endif %}
+			<a href="/sound/toUpload" class="btn btn-primary" role="button">添 加</a>
+	    </div>
+
+	    <script src="{% static "js/audio.min.js" %}"></script>
+		<script>
+		    audiojs.events.ready(function() {
+		    var as = audiojs.createAll();
+		  });
+		</script>
+	</body>
+
+</html> 
