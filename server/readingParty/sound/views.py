@@ -43,7 +43,7 @@ def list(request):
         sounds = paginator.page(1)  # 取第一页的记录
     except EmptyPage:  # 如果页码太大，没有相应的记录
         sounds = paginator.page(paginator.num_pages)  # 取最后一页的记录
-    return render_to_response('list.html', {'sounds': sounds},context_instance=RequestContext(request))
+    return render_to_response('list2.html', {'sounds': sounds},context_instance=RequestContext(request))
 
 @login_required
 def toUpload(request):
