@@ -11,9 +11,9 @@
 	<body>
 		{% include 'nav.html' %}
 		<div class="container">
+			
 			<br>
-			<br>
-
+			<p><a href="/sound/toUpload" class="btn btn-primary" role="button">添 加</a></p>
 			{% if sounds %}
 			<ul class="list-group">
 				{% for sound in sounds %}
@@ -24,12 +24,13 @@
 			    	<p>{{sound.bookUrl}}</p>
 					<p><audio src="{{ sound.soundfile.url }}" preload="auto" /></p>
 
+					 <p class="text-right">	
+					 	<a href="/sound/play/{{sound.id}}"><span class="glyphicon glyphicon-comment">{{sound.comment}}</span> </a>&nbsp;&nbsp;&nbsp;
 					{% ifequal sound.reader request.user %}
-	                <p class="text-right">	
 	                	<a href="/sound/toEdit/{{sound.id}}"><span class="glyphicon glyphicon-edit"></span> </a>&nbsp;&nbsp;&nbsp;
 	                	<a href="/sound/remove/{{sound.id}}"><span class="glyphicon glyphicon-remove"></span></a>
-	                </p>
 	                {% endifequal %}
+	                 </p>
 			    </div>
 			  </li>
 			    {% endfor %}
@@ -58,7 +59,6 @@
 			{% else %}
 				<p>No documents.</p>
 			{% endif %}
-			<a href="/sound/toUpload" class="btn btn-primary" role="button">添 加</a>
 	    </div>
 
 	    <script src="{% static "js/audio.min.js" %}"></script>
