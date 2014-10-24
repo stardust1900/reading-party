@@ -44,7 +44,7 @@
 			{% endif %}
 		</div>
 		{% if request.user.is_authenticated %}
-		<div>
+		<div >
 		<form  class="form-horizontal" action="{% url 'addComment' %}" method="post">
 		{% csrf_token %}
 		<input type="hidden" name="soundId" value="{{sound.id}}" />
