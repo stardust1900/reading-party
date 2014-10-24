@@ -129,7 +129,7 @@ def remove(request, soundId):
 
 def play(request, soundId):
     useragent = request.META['HTTP_USER_AGENT']
-    print(useragent)
+    logger.debug(useragent)
     s = Sound.objects.get(id=soundId)
     comments = s.comment_set.all()
     form = CommentForm()
