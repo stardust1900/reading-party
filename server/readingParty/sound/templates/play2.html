@@ -7,6 +7,8 @@
 <title>读书会--{{sound.memo}}({{sound.reader.username}})</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 {% load staticfiles %}
+<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+<link href="{% static "css/signin.css" %}" rel="stylesheet">
 <link href="{% static 'css/circle.skin/circle.player.css' %}" rel="stylesheet">
 <!-- <script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
 <script type="text/javascript" src="{% static 'js/jquery-2.1.1.min.js' %}"></script>
@@ -54,7 +56,10 @@ $(document).ready(function(){
 </script>
 </head>
 <body>
-			<!-- The jPlayer div must not be hidden. Keep it at the root of the body element to avoid any such problems. -->
+	{% include 'nav.html' %}
+		
+<div class="container">
+		<!-- The jPlayer div must not be hidden. Keep it at the root of the body element to avoid any such problems. -->
 			<div id="jquery_jplayer_1" class="cp-jplayer"></div>
 
 			<!-- The container for the interface can go where you want to display it. Show and hide it as you need. -->
@@ -74,7 +79,64 @@ $(document).ready(function(){
 					<li><a class="cp-pause" style="display:none;" tabindex="1">pause</a></li> <!-- Needs the inline style here, or jQuery.show() uses display:inline instead of display:block -->
 				</ul>
 			</div>
+		<br>
+		<div class="media">
+			<!-- <span><audio src="{{ sound.soundfile.url }}" preload="auto" /></span> -->
+			<div class="media-body">
+		      <blockquote>{{sound.memo}}  <footer>{{sound.reader.username}}</footer></blockquote>
+		    </div>
+		</div>
+		<hr>
+		<div class="panel panel-default">
+		 <div class="panel-heading">
+		    <h3 class="panel-title">评论</h3>
+		  </div>
+		     {% if comments %}
+		     <ul class="list-group">
+			     {% for comment in comments %}
+			     <li class="list-group-item">
+			     	<h4>{{comment.commenter.username}}:</h4>
+			     	<p class="text-justify">{{comment.content}}</p>
+			     	{% ifequal comment.commenter request.user %}
+			     	<p class="text-right"><a href="/sound/removeComment/{{comment.id}}"><span class="glyphicon glyphicon-trash"></span></a></p>
+			     	{% else %}
+				     	{% ifequal sound.reader request.user %}
+				     	<p class="text-right"><a href="/sound/removeComment/{{comment.id}}"><span class="glyphicon glyphicon-trash"></span></a></p>
+				     	{% endifequal %}
+			     	{% endifequal %}
+			     </li>
+			     {% endfor %}
+			 </ul>
+		     {% else %}
+				<p>No comments.</p>
+			{% endif %}
+		</div>
+		{% if request.user.is_authenticated %}
+		<div >
+		<form  class="form-horizontal" action="{% url 'addComment' %}" method="post">
+		{% csrf_token %}
+		<input type="hidden" name="soundId" value="{{sound.id}}" />
+		<div class="form-group col-sm-8">
+         <textarea name="content" class="form-control" rows="3" required></textarea>
+        </div>
 
+		 <div class="form-group">
+          <div class="col-sm-offset-2 col-sm-8">
+            <button type="submit" class="btn btn-primary">评 论</button>
+           <a href="{% url 'list' %}" class="btn btn-primary" role="button">返 回</a>
+          </div>
+        </div>
+		</form>
+		</div>
+		{% else %}
+		<div>
+			<p class="bg-success">登录后才能评论 :) 
+				<br>
+				<br>
+			向<a href="http://weibo.com/halfg0d">@王半山人</a>索要注册邀请码</p>
+		</div>
+		{% endif %}
+		</div>
 </body>
 
 </html>

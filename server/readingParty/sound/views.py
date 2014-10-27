@@ -133,10 +133,11 @@ def play(request, soundId):
     s = Sound.objects.get(id=soundId)
     comments = s.comment_set.all()
     form = CommentForm()
-    if ('Android' in useragent or 'iPhone' in useragent or 'Lumia' in useragent):
-        return render_to_response('play2.html', {'form': form,'sound':s,'comments':comments}, context_instance=RequestContext(request))
-    else:
-        return render_to_response('play.html', {'form': form,'sound':s,'comments':comments}, context_instance=RequestContext(request))
+    return render_to_response('play2.html', {'form': form,'sound':s,'comments':comments}, context_instance=RequestContext(request))
+    # if ('Android' in useragent or 'iPhone' in useragent or 'Lumia' in useragent):
+    #     return render_to_response('play2.html', {'form': form,'sound':s,'comments':comments}, context_instance=RequestContext(request))
+    # else:
+    #     return render_to_response('play2.html', {'form': form,'sound':s,'comments':comments}, context_instance=RequestContext(request))
 
 
 @login_required

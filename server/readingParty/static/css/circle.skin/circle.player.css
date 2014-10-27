@@ -17,6 +17,7 @@
 	background:url("bgr.jpg") 0 0 no-repeat;
 	padding:48px;
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	box-sizing: content-box;
 }
 
 .cp-container :focus {
