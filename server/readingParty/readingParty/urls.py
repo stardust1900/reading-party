@@ -12,6 +12,8 @@ urlpatterns = patterns('',
 
     #url(r'^admin/', include(admin.site.urls)),
     url(r'^sound/', include('sound.urls')),
+    url(r'^accounts/', include('reader.urls')),
+    url(r'^reader/', include('reader.urls')),
     url(r'^$', RedirectView.as_view(url='/sound/list/')),
 ) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

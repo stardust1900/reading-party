@@ -7,16 +7,19 @@ from sound.models import Sound
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 def list(request):
 	sounds = Sound.objects.all()
 	return render_to_response('list.html',{'sounds':sounds})
 
+@login_required
 def toUpload(request):
 	#return HttpResponse("Hello world")
 	form = SoundForm()
 	return render_to_response('upload.html',{'form': form},context_instance=RequestContext(request));
 
+@login_required
 def upload(request):
 	if request.method == 'POST':
 	    form = SoundForm(request.POST, request.FILES)
@@ -32,6 +35,7 @@ def upload(request):
 	#使用url转向 更改url到list
 	return HttpResponseRedirect(reverse('sound.views.list'))
 
+@login_required
 def toEdit(request,soundId):
 	s = Sound.objects.get(id=soundId)
 	data = {'':None,'memo':s.memo,'bookUrl':s.bookUrl}
@@ -40,6 +44,7 @@ def toEdit(request,soundId):
 
 	return render_to_response('edit.html',{'form': form},context_instance=RequestContext(request));
 
+@login_required
 def edit(request):
 	# s = Sound.objects.get(id=)
 	if request.method == 'POST':
@@ -56,7 +61,7 @@ def edit(request):
 	#使用url转向 更改url到list
 	return HttpResponseRedirect(reverse('sound.views.list'))
 
-
+@login_required
 def remove(request,soundId):
 	s = Sound.objects.get(id=soundId)
 	s.delete()
