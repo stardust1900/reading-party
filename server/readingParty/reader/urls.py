@@ -2,4 +2,5 @@
 from django.conf.urls import patterns, include, url
 urlpatterns = patterns('reader.views',
     url(r'^login/$', 'login', name='login'),
+    # url(r'^signin/$', 'signin', name='signin'),
 )

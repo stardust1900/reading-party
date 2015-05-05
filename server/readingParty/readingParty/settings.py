@@ -95,3 +95,5 @@ STATICFILES_DIRS = (
     ("img", os.path.join(STATIC_ROOT,'img')),
     ("fonts", os.path.join(STATIC_ROOT,'fonts')),
 )
+
+AUTHENTICATION_BACKENDS = ('reader.backends.EmailCheckModelBackend',)
