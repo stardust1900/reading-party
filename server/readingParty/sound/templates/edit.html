@@ -8,7 +8,7 @@
 	</head>
 
 	<body>
-
+      <div class="container">
 		<!-- Upload form. Note enctype attribute! -->
 		<form action="{% url "edit" %}" method="post">
 			{% csrf_token %}
@@ -17,7 +17,7 @@
 			<p>{{form.bookUrl.label_tag}}  {{form.bookUrl}}</p>
 			<p><input type="submit" value="Edit" /></p>
 		</form>
-		
+		</div>
 	</body>
 
 </html> 

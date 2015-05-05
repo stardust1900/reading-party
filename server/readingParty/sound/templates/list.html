@@ -14,25 +14,27 @@
 	</head>
 
 	<body>
-		<h3>一分钟读书会</h3>
-        {% if sounds %}
-		<table class="table">
-			{% for sound in sounds %}
-			<tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{sound.memo}}</td>
-                <td><audio src="{{ sound.soundfile.url }}" preload="auto" /></td>
-                <td>
-                	<a href="/sound/toEdit/{{sound.id}}"><span class="glyphicon glyphicon-edit"></span> </a>
-                	<a href="/sound/remove/{{sound.id}}"><span class="glyphicon glyphicon-remove"></span></a>
-                </td>
-			</tr>
-            {% endfor %}
-		</table>
-		{% else %}
-			<p>No documents.</p>
-		{% endif %}
-		<a href="/sound/toUpload" class="btn btn-primary btn-lg active" role="button">添 加</a>
+		<div class="container">
+			<h3>一分钟读书会</h3>
+	        {% if sounds %}
+			<table class="table">
+				{% for sound in sounds %}
+				<tr>
+	                <td>{{forloop.counter}}</td>
+	                <td>{{sound.memo}}</td>
+	                <td><audio src="{{ sound.soundfile.url }}" preload="auto" /></td>
+	                <td>
+	                	<a href="/sound/toEdit/{{sound.id}}"><span class="glyphicon glyphicon-edit"></span> </a>&nbsp;&nbsp;&nbsp;
+	                	<a href="/sound/remove/{{sound.id}}"><span class="glyphicon glyphicon-remove"></span></a>
+	                </td>
+				</tr>
+	            {% endfor %}
+			</table>
+			{% else %}
+				<p>No documents.</p>
+			{% endif %}
+			<a href="/sound/toUpload" class="btn btn-primary btn-lg active" role="button">添 加</a>
+	    </div>
 	</body>
 
 </html> 

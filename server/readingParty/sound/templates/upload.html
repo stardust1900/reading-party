@@ -8,7 +8,7 @@
 	</head>
 
 	<body>
-
+        <div class="container">
 		<!-- Upload form. Note enctype attribute! -->
 		<form action="{% url "upload" %}" method="post" enctype="multipart/form-data">
 			{% csrf_token %}
@@ -22,7 +22,7 @@
 			<p>{{form.bookUrl.label_tag}}  {{form.bookUrl}}</p>
 			<p><input type="submit" value="上传" class="btn btn-primary"/></p>
 		</form>
-		
+		</div>
 	</body>
 
 </html> 
